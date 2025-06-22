@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: ticket-service
+  main:
+    banner-mode: OFF
