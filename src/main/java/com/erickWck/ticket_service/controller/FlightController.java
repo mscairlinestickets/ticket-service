@@ -1,6 +1,7 @@
 package com.erickWck.ticket_service.controller;
 
-import com.erickWck.ticket_service.entity.Ticket;
+import com.erickWck.ticket_service.dto.FlightDtoResponse;
+import com.erickWck.ticket_service.dto.FlightDtoRequest;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,31 +9,31 @@ import java.util.List;
 
 @RequestMapping("/ticket")
 @RestController
-public class TicketController {
+public class FlightController {
 
     @GetMapping("/api/flights")
-    public List<Ticket> listAllFlights(){
+    public List<FlightDtoResponse> listAllFlights(){
         return null;
     }
 
     @GetMapping("/api/flights/{id}")
-    public Ticket getFindByIdFlights( long id){
+    public FlightDtoResponse getFindByIdFlights(long id){
         return null;
     }
 
     @PostMapping("/api/flights")
-    public Ticket createNewFlight(@RequestBody @Valid Ticket ticket){
+    public FlightDtoResponse createNewFlight(@RequestBody @Valid FlightDtoRequest flightRequest){
         return null;
     }
 
     @PutMapping("/api/flights/{id}")
-    public Ticket updateFlightsExist(@PathVariable long id){
+    public FlightDtoResponse updateFlightsExist(@PathVariable long id){
         return null;
     }
 
     @DeleteMapping("/api/flights/{id}")
-    public Ticket deleteFlightsExist(@PathVariable long id){
-        return null;
+    public void deleteFlightsExist(@PathVariable long id){
+        ;
     }
 
 }
