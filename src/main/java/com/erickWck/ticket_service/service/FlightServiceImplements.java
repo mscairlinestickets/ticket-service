@@ -7,9 +7,10 @@ import com.erickWck.ticket_service.entity.Airline;
 import com.erickWck.ticket_service.entity.Flight;
 import com.erickWck.ticket_service.exception.AircraftNotFoundException;
 import com.erickWck.ticket_service.exception.AirlineNotFoundException;
+import com.erickWck.ticket_service.exception.FlightNotFound;
 import com.erickWck.ticket_service.mapper.FlightMapper;
-import com.erickWck.ticket_service.repository.AirLineRepository;
 import com.erickWck.ticket_service.repository.AircraftRepository;
+import com.erickWck.ticket_service.repository.AirlineRepository;
 import com.erickWck.ticket_service.repository.FlightRepository;
 import com.erickWck.ticket_service.service.contract.FlightService;
 import com.erickWck.ticket_service.service.flight.FlightValidator;
@@ -18,25 +19,28 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 
 @Service
 public class FlightServiceImplements implements FlightService {
 
 
-    private final AirLineRepository airLineRepository;
+    private final AirlineRepository airLineRepository;
     private final AircraftRepository aircraftRepository;
     private final FlightRepository flightRepository;
     private final FlightValidator flightValidator;
     private static final Logger log = LoggerFactory.getLogger(FlightServiceImplements.class);
 
-    public FlightServiceImplements(AirLineRepository airLineRepository, AircraftRepository aircraftRepository,
-                                   FlightRepository flightRepository, FlightValidator flightValidator) {
+
+    public FlightServiceImplements(AirlineRepository airLineRepository, AircraftRepository aircraftRepository, FlightRepository flightRepository, FlightValidator flightValidator) {
         this.airLineRepository = airLineRepository;
         this.aircraftRepository = aircraftRepository;
         this.flightRepository = flightRepository;
         this.flightValidator = flightValidator;
     }
-
 
     @Override
     public FlightDtoResponse createFlight(FlightDtoRequest request) {
@@ -57,22 +61,47 @@ public class FlightServiceImplements implements FlightService {
 
 
     @Override
-    public FlightDtoResponse findById(Long id) {
-        return null;
+    public FlightDtoResponse findFlightNumber(String flyNumber) {
+
+        return FlightMapper.entityToDto(flightRepository.findByFlightNumber(flyNumber)
+                .orElseThrow(() -> new FlightNotFound(flyNumber))
+        );
     }
 
     @Override
-    public List<FlightDtoResponse> findAll() {
-        return List.of();
+    public List<FlightDtoResponse> findAllFlight() {
+        return flightRepository.findAll()
+                .stream().map(FlightMapper::entityToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public FlightDtoResponse update(Long id, FlightDtoRequest request) {
-        return null;
+    public FlightDtoResponse editFlight(String flyNumber, FlightDtoRequest request) {
+
+        return flightRepository.findByFlightNumber(flyNumber)
+                .map(existFly -> {
+                    Flight flightUpdate = Flight.builder()
+                            .id(existFly.getId())
+                            .flightNumber(existFly.getFlightNumber())
+                            .origin(request.origin())
+                            .destination(request.destination())
+                            .departureDateTime(request.departureDateTime())
+                            .totalSeats(request.totalSeats())
+                            .availableSeats(request.availableSeats())
+                            .price(request.price())
+                            .airline(existFly.getAirline())
+                            .aircraft(existFly.getAircraft())
+                            .build();
+                    flightRepository.save(flightUpdate);
+                    return FlightMapper.entityToDto(flightUpdate);
+                })
+                .orElseThrow(() -> new FlightNotFound(flyNumber));
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(String flyNumber) {
+
+        flightRepository.deleteByFlightNumber(findFlightNumber(flyNumber).flightNumber());
 
     }
 

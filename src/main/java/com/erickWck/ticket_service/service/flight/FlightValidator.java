@@ -3,9 +3,11 @@ package com.erickWck.ticket_service.service.flight;
 import com.erickWck.ticket_service.entity.Flight;
 import com.erickWck.ticket_service.exception.BusinessRuleException;
 import com.erickWck.ticket_service.repository.FlightRepository;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
+@Component
 public class FlightValidator {
 
     private final FlightRepository flightRepository;

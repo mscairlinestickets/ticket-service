@@ -17,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,7 +43,7 @@ class FlightValidatorTest {
     @BeforeEach
     void setup() {
         request = new FlightDtoRequest("LAT123", "GRU", "GIG",
-                LocalDateTime.now().plusMinutes(30), 180, 180, "TAM", "A320");
+                LocalDateTime.now().plusMinutes(30), 180, 180, BigDecimal.valueOf(765.99),"TAM", "A320");
         airline = new Airline(1L, "LATAM", "TAM");
         aircraft = new Aircraft(1L, "A320", 180);
         flight = FlightMapper.dtoToEntity(request, airline, aircraft);
@@ -133,7 +134,7 @@ class FlightValidatorTest {
 
     private Flight createFlight(LocalDateTime departureDateTime, String destination) {
         var request = new FlightDtoRequest("LAT123", "GRU", destination,
-                departureDateTime, 180, 180, "TAM", "A320");
+                departureDateTime, 180, 180, BigDecimal.valueOf(265.99),"TAM", "A320");
         var airline = new Airline(1L, "LATAM", "TAM");
         var aircraft = new Aircraft(1L, "A320", 180);
         return FlightMapper.dtoToEntity(request, airline, aircraft);

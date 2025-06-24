@@ -3,6 +3,7 @@ package com.erickWck.ticket_service.dto;
 import com.erickWck.ticket_service.entity.Flight;
 import lombok.Builder;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Builder
@@ -20,6 +21,8 @@ public record FlightDtoResponse(
 
         int availableSeats,
 
+        BigDecimal price,
+
         String airlineName,
 
         String icaoCode,
@@ -31,7 +34,7 @@ public record FlightDtoResponse(
 
     public static FlightDtoResponse entityToDto(Flight flight) {
         return new FlightDtoResponse(flight.getFlightNumber(), flight.getOrigin(), flight.getDestination(), flight.getDepartureDateTime(),
-                flight.getTotalSeats(), flight.getAvailableSeats(), flight.getAirline().name(),
+                flight.getTotalSeats(), flight.getAvailableSeats(), flight.getPrice(), flight.getAirline().name(),
                 flight.getAirline().icaoCode(), flight.getAircraft().model(), flight.getAircraft().seatCapacity());
     }
 

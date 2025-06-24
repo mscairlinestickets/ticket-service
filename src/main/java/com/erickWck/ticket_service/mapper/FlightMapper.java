@@ -17,6 +17,7 @@ public class FlightMapper {
                 dto.departureDateTime(),
                 dto.totalSeats(),
                 dto.availableSeats(),
+                dto.price(),
                 airline,
                 aircraft
         );
@@ -30,6 +31,7 @@ public class FlightMapper {
                 flight.getDepartureDateTime(),
                 flight.getTotalSeats(),
                 flight.getAvailableSeats(),
+                flight.getPrice(),
                 flight.getAirline().name(),
                 flight.getAirline().icaoCode(),
                 flight.getAircraft().model(),

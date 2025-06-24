@@ -3,3 +3,16 @@ spring:
     name: ticket-service
   main:
     banner-mode: OFF
+  datasource:
+    url: jdbc:postgresql://localhost:5432/mydatabase
+    username: myuser
+    password: secret
+    hikari:
+      connection-timeout: 2000 #ms
+      maximum-pool-size: 5
+
+#  flyway:
+#    enabled: true
+#    baseline-on-migrate: true
+#    locations: classpath:db/migration
+

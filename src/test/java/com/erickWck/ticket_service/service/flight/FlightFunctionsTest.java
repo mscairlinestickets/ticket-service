@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,8 +29,9 @@ class FlightFunctionsTest {
 
         @BeforeEach
         void setup() {
+            double value = 435.43;
             request = new FlightDtoRequest("LAT123", "GRU", "GIG",
-                    LocalDateTime.now().plusDays(1), 180, 180, "TAM", "A320");
+                    LocalDateTime.now().plusDays(1), 180, 180, BigDecimal.valueOf(585.99), "TAM", "A320");
             airline = new Airline(1L, "LATAM", "TAM");
             aircraft = new Aircraft(1L, "A320", 180);
             flight = FlightMapper.dtoToEntity(request, airline, aircraft);
@@ -81,6 +83,5 @@ class FlightFunctionsTest {
             String message = "Voo " + flight.getFlightNumber() + " está lotado. Não há assentos disponíveis.";
             assertEquals(message, messageException.getMessage());
         }
-
     }
 }

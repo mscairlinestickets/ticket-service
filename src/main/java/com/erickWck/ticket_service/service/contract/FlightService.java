@@ -8,10 +8,9 @@ import java.util.List;
 public interface FlightService {
 
     FlightDtoResponse createFlight(FlightDtoRequest request);
-    FlightDtoResponse findById(Long id);
-    List<FlightDtoResponse> findAll();
-    FlightDtoResponse update(Long id, FlightDtoRequest request);
-
-    void delete(Long id);
+    FlightDtoResponse findFlightNumber(String flyNumber);
+    List<FlightDtoResponse> findAllFlight();
+    FlightDtoResponse editFlight(String flyNumber, FlightDtoRequest request);
+    void delete(String flyBumber);
 
 }

@@ -1,15 +1,22 @@
 package com.erickWck.ticket_service.entity;
 
+import jakarta.annotation.Generated;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
+@Table(name = "flight")
 public class Flight {
 
+    @Id
     private Long id;
 
     private String flightNumber;
@@ -24,6 +31,7 @@ public class Flight {
 
     private int availableSeats;
 
+    private BigDecimal price;
     // Relação com a companhia aérea
 //        @ManyToOne(optional = false)
 //        @JoinColumn(name = "airline_id")
