@@ -48,9 +48,7 @@ dependencies {
     pitest 'org.pitest:pitest-junit5-plugin:1.2.1'
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
-}
+
 
 pitest {
     targetClasses = ['com.erickWck.ticket_service.service.*']
@@ -64,3 +62,23 @@ pitest {
     timestampedReports = false
     junit5PluginVersion = '1.2.1'
 }
+
+bootBuildImage {
+    builder = "docker.io/paketobuildpacks/builder-jammy-base"
+    imageName = "${project.name}"
+    environment = ["BP_JVM_VERSION": "17"]
+
+    docker {
+        publishRegistry {
+            username = project.findProperty("registryUsername")
+            password = project.findProperty("registryToken")
+            url = project.findProperty("registryUrl")
+        }
+    }
+}
+
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+

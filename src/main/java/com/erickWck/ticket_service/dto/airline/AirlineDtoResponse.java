@@ -1,4 +1,9 @@
 package com.erickWck.ticket_service.dto.airline;
 
-public class AirlineDtoResponse {
+public record AirlineDtoResponse(
+
+        String name,
+
+        String icaoCode
+) {
 }

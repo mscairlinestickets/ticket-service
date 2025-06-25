@@ -1,7 +1,7 @@
 package com.erickWck.ticket_service.service;
 
-import com.erickWck.ticket_service.dto.FlightDtoRequest;
-import com.erickWck.ticket_service.dto.FlightDtoResponse;
+import com.erickWck.ticket_service.dto.flight.FlightDtoRequest;
+import com.erickWck.ticket_service.dto.flight.FlightDtoResponse;
 import com.erickWck.ticket_service.entity.Aircraft;
 import com.erickWck.ticket_service.entity.Airline;
 import com.erickWck.ticket_service.entity.Flight;
@@ -13,15 +13,13 @@ import com.erickWck.ticket_service.repository.AircraftRepository;
 import com.erickWck.ticket_service.repository.AirlineRepository;
 import com.erickWck.ticket_service.repository.FlightRepository;
 import com.erickWck.ticket_service.service.contract.FlightService;
-import com.erickWck.ticket_service.service.flight.FlightValidator;
+import com.erickWck.ticket_service.service.flightFunctions.FlightValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 @Service

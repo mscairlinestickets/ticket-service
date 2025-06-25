@@ -1,4 +1,4 @@
-package com.erickWck.ticket_service.service.flight;
+package com.erickWck.ticket_service.service.flightFunctions;
 
 import com.erickWck.ticket_service.dto.flight.FlightDtoRequest;
 import com.erickWck.ticket_service.entity.Aircraft;

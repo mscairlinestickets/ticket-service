@@ -1,7 +1,7 @@
 package com.erickWck.ticket_service.mapper;
 
-import com.erickWck.ticket_service.dto.FlightDtoRequest;
-import com.erickWck.ticket_service.dto.FlightDtoResponse;
+import com.erickWck.ticket_service.dto.flight.FlightDtoRequest;
+import com.erickWck.ticket_service.dto.flight.FlightDtoResponse;
 import com.erickWck.ticket_service.entity.Aircraft;
 import com.erickWck.ticket_service.entity.Airline;
 import com.erickWck.ticket_service.entity.Flight;

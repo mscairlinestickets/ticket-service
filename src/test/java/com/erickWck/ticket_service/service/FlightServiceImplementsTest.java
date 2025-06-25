@@ -1,4 +1,4 @@
-package com.erickWck.ticket_service.service.contract;
+package com.erickWck.ticket_service.service;
 
 import com.erickWck.ticket_service.dto.flight.FlightDtoRequest;
 import com.erickWck.ticket_service.dto.flight.FlightDtoResponse;
@@ -13,7 +13,6 @@ import com.erickWck.ticket_service.mapper.FlightMapper;
 import com.erickWck.ticket_service.repository.AirlineRepository;
 import com.erickWck.ticket_service.repository.AircraftRepository;
 import com.erickWck.ticket_service.repository.FlightRepository;
-import com.erickWck.ticket_service.service.FlightServiceImplements;
 import com.erickWck.ticket_service.service.flightFunctions.FlightValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -434,4 +433,6 @@ class FlightServiceImplementsTest {
             assertEquals(message, messageException.getMessage());
         }
     }
+
+
 }
