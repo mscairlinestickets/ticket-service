@@ -1,7 +1,7 @@
 package com.erickWck.ticket_service.service.contract;
 
-import com.erickWck.ticket_service.dto.FlightDtoRequest;
-import com.erickWck.ticket_service.dto.FlightDtoResponse;
+import com.erickWck.ticket_service.dto.flight.FlightDtoRequest;
+import com.erickWck.ticket_service.dto.flight.FlightDtoResponse;
 import com.erickWck.ticket_service.entity.Aircraft;
 import com.erickWck.ticket_service.entity.Airline;
 import com.erickWck.ticket_service.entity.Flight;
@@ -14,7 +14,7 @@ import com.erickWck.ticket_service.repository.AirlineRepository;
 import com.erickWck.ticket_service.repository.AircraftRepository;
 import com.erickWck.ticket_service.repository.FlightRepository;
 import com.erickWck.ticket_service.service.FlightServiceImplements;
-import com.erickWck.ticket_service.service.flight.FlightValidator;
+import com.erickWck.ticket_service.service.flightFunctions.FlightValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

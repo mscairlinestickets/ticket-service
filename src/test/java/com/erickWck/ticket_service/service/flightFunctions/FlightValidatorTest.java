@@ -1,6 +1,6 @@
 package com.erickWck.ticket_service.service.flight;
 
-import com.erickWck.ticket_service.dto.FlightDtoRequest;
+import com.erickWck.ticket_service.dto.flight.FlightDtoRequest;
 import com.erickWck.ticket_service.entity.Aircraft;
 import com.erickWck.ticket_service.entity.Airline;
 import com.erickWck.ticket_service.entity.Flight;
