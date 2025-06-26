@@ -1,5 +1,4 @@
 name: Commit Stage
-
 on: push
 
 env:
@@ -9,7 +8,52 @@ env:
 
 jobs:
   build:
-    name: Build, Test and Publish
+    name: Build and Test
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - name: Build, unit test and integrations tests
+        run: |
+          chmod +x gradlew
+          ./gradlew build
+          ./gradlew pitest 
+          ./gradlew bootBuildImage
+
+      - name: Upload PITest report
+        uses: actions/upload-artifact@v4
+        with:
+          name: pitest-report
+          path: build/reports/pitest
+
+      - name: Code vulnerability scanning
+        uses: anchore/scan-action@v3
+        id: scan
+        with:
+          path: "${{ github.workspace }}"
+          fail-build: false
+          severity-cutoff: high
+
+      - name: Upload vunerability report
+        uses: github/codeql-action/upload-sarif@v3
+        if: success() || failure()
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}
+  package:
+    name: Package and Publish
+    if: ${{ github.ref == 'refs/heads/main' }}
+    needs: [ build ]
     runs-on: ubuntu-22.04
     permissions:
       contents: read
@@ -26,38 +70,11 @@ jobs:
           java-version: 21
           cache: gradle
 
-      - name: Build, unit test and integration tests
+      - name: Build container image
         run: |
           chmod +x gradlew
-          ./gradlew build
-          ./gradlew pitest
-
-      - name: Upload PITest report
-        uses: actions/upload-artifact@v4
-        with:
-          name: pitest-report
-          path: build/reports/pitest
-
-      - name: Log into container registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and publish image to GHCR
-        run: |
           ./gradlew bootBuildImage \
-            -PimageName=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }} \
-            -PregistryUsername=${{ github.actor }} \
-            -PregistryToken=${{ secrets.GITHUB_TOKEN }} \
-            -Pversion=${{ env.VERSION }}
-
-      - name: Tag image as latest and push
-        run: |
-          docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }} \
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            --imageName ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
 
       - name: OCI image vulnerability scanning
         uses: anchore/scan-action@v3
@@ -72,3 +89,20 @@ jobs:
         if: success() || failure()
         with:
           sarif_file: ${{ steps.scan.outputs.sarif }}
+
+      - name: Log into container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish container image
+        run: docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+
+      - name: Publish container image (latest)
+        run: |
+          docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }} \
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          
