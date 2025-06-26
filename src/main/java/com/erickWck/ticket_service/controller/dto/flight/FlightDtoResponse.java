@@ -1,4 +1,4 @@
-package com.erickWck.ticket_service.domain.dto.flight;
+package com.erickWck.ticket_service.controller.dto.flight;
 
 import com.erickWck.ticket_service.domain.entity.Flight;
 import lombok.Builder;

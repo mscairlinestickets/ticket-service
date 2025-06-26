@@ -1,7 +1,7 @@
 package com.erickWck.ticket_service.domain.service;
 
-import com.erickWck.ticket_service.domain.dto.airline.AirlineDtoRequest;
-import com.erickWck.ticket_service.domain.dto.airline.AirlineDtoResponse;
+import com.erickWck.ticket_service.controller.dto.airline.AirlineDtoRequest;
+import com.erickWck.ticket_service.controller.dto.airline.AirlineDtoResponse;
 import com.erickWck.ticket_service.domain.entity.Airline;
 import com.erickWck.ticket_service.domain.exception.AirlineAlreadyExist;
 import com.erickWck.ticket_service.domain.exception.AirlineNotFoundException;

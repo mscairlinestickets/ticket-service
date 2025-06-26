@@ -1,4 +1,4 @@
-package com.erickWck.ticket_service.domain.dto.airline;
+package com.erickWck.ticket_service.controller.dto.airline;
 
 public record AirlineDtoResponse(
 

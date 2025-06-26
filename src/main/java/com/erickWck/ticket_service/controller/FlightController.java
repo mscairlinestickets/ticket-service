@@ -1,7 +1,7 @@
 package com.erickWck.ticket_service.controller;
 
-import com.erickWck.ticket_service.domain.dto.flight.FlightDtoResponse;
-import com.erickWck.ticket_service.domain.dto.flight.FlightDtoRequest;
+import com.erickWck.ticket_service.controller.dto.flight.FlightDtoResponse;
+import com.erickWck.ticket_service.controller.dto.flight.FlightDtoRequest;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 

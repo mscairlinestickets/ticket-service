@@ -1,7 +1,7 @@
 package com.erickWck.ticket_service.domain.service.contract;
 
-import com.erickWck.ticket_service.domain.dto.flight.FlightDtoRequest;
-import com.erickWck.ticket_service.domain.dto.flight.FlightDtoResponse;
+import com.erickWck.ticket_service.controller.dto.flight.FlightDtoRequest;
+import com.erickWck.ticket_service.controller.dto.flight.FlightDtoResponse;
 
 import java.util.List;
 
