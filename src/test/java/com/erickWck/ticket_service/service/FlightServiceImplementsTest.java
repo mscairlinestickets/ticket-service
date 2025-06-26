@@ -1,19 +1,17 @@
 package com.erickWck.ticket_service.service;
 
-import com.erickWck.ticket_service.dto.flight.FlightDtoRequest;
-import com.erickWck.ticket_service.dto.flight.FlightDtoResponse;
-import com.erickWck.ticket_service.entity.Aircraft;
-import com.erickWck.ticket_service.entity.Airline;
-import com.erickWck.ticket_service.entity.Flight;
-import com.erickWck.ticket_service.exception.AircraftNotFoundException;
-import com.erickWck.ticket_service.exception.AirlineNotFoundException;
-import com.erickWck.ticket_service.exception.BusinessRuleException;
-import com.erickWck.ticket_service.exception.FlightNotFound;
-import com.erickWck.ticket_service.mapper.FlightMapper;
-import com.erickWck.ticket_service.repository.AirlineRepository;
-import com.erickWck.ticket_service.repository.AircraftRepository;
-import com.erickWck.ticket_service.repository.FlightRepository;
-import com.erickWck.ticket_service.service.flightFunctions.FlightValidator;
+import com.erickWck.ticket_service.domain.exception.*;
+import com.erickWck.ticket_service.domain.service.FlightServiceImplements;
+import com.erickWck.ticket_service.domain.dto.flight.FlightDtoRequest;
+import com.erickWck.ticket_service.domain.dto.flight.FlightDtoResponse;
+import com.erickWck.ticket_service.domain.entity.Aircraft;
+import com.erickWck.ticket_service.domain.entity.Airline;
+import com.erickWck.ticket_service.domain.entity.Flight;
+import com.erickWck.ticket_service.domain.mapper.FlightMapper;
+import com.erickWck.ticket_service.domain.repository.AirlineRepository;
+import com.erickWck.ticket_service.domain.repository.AircraftRepository;
+import com.erickWck.ticket_service.domain.repository.FlightRepository;
+import com.erickWck.ticket_service.domain.service.flightFunctions.FlightValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -221,6 +219,26 @@ class FlightServiceImplementsTest {
             //assert
             assertEquals(flyNumber, result.flightNumber());
             assertionsRequestWithDtoResponse(result);
+        }
+
+        @Test
+        void shouldThrowAlreadyExceptionWhenAlreadyExist() {
+            String flyNumber = "LAT123";
+            String model = "A320";
+            String icao = "TAM";
+            //arrange
+            when(airLineRepository.findByIcaoCode(icao)).thenReturn(Optional.of(airline));
+            when(aircraftRepository.findByModel(model)).thenReturn(Optional.of(aircraft));
+            when(flightRepository.findByFlightNumber(flyNumber)).thenReturn(Optional.of(flight));
+
+            //act
+            var messageException = assertThrows(FlightAlreadyExist.class, () -> {
+                flightService.createFlight(request);
+            });
+
+            //assert
+            String message = "Flight with number: " + flyNumber + " already exist.";
+            assertEquals(message, messageException.getMessage());
         }
 
         @Test

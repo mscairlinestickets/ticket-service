@@ -1,10 +1,11 @@
 package com.erickWck.ticket_service.service;
 
-import com.erickWck.ticket_service.dto.airline.AirlineDtoRequest;
-import com.erickWck.ticket_service.dto.airline.AirlineDtoResponse;
-import com.erickWck.ticket_service.entity.Airline;
-import com.erickWck.ticket_service.exception.AirlineNotFoundException;
-import com.erickWck.ticket_service.repository.AirlineRepository;
+import com.erickWck.ticket_service.domain.service.AirlineServiceImplements;
+import com.erickWck.ticket_service.domain.dto.airline.AirlineDtoRequest;
+import com.erickWck.ticket_service.domain.entity.Airline;
+import com.erickWck.ticket_service.domain.exception.AirlineAlreadyExist;
+import com.erickWck.ticket_service.domain.exception.AirlineNotFoundException;
+import com.erickWck.ticket_service.domain.repository.AirlineRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -13,7 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -214,5 +214,49 @@ class AirlineServiceImplementsTest {
             assertEquals(message, messageException.getMessage());
 
         }
+    }
+
+    @Nested
+    class createAirline {
+
+
+        @Test
+        @DisplayName("Deve cirar a companhia aérea quando não existe.")
+        void shouldCreateAirlineWhenDoesNotExist() {
+            //arrange
+            var request = new AirlineDtoRequest("Fly Cell", "FLC");
+            when(airlineRepository.save(any(Airline.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+
+            //act
+            var resultCreate = airlineService.createAirline(request);
+
+            //assert
+            verify(airlineRepository, times(1)).save(captor.capture());
+            var captured = captor.getValue();
+            assertEquals(captured.icaoCode(), resultCreate.icaoCode());
+            assertEquals(captured.name(), resultCreate.name());
+
+        }
+
+        @Test
+        @DisplayName("Deve lançar a exceção, se já existi a companhia aérea com o icaoCode")
+        void shouldThrowAirlineAlreadyExceptionWhenExist() {
+            //arrange
+            String icao = "FLC";
+            var request = new AirlineDtoRequest("Fly Cell", "FLC");
+            var airline = new Airline(1L, "Fly Cell", icao);
+            when(airlineRepository.findByIcaoCode(icao)).thenReturn(Optional.of(airline));
+
+            //act
+
+            var messageException = assertThrows(AirlineAlreadyExist.class, () -> {
+                airlineService.createAirline(request);
+            });
+
+            String message = "Airline with icao code: " + icao + " already exist.";
+            assertEquals(message, messageException.getMessage());
+        }
+
     }
 }

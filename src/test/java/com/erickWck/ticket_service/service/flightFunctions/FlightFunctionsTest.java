@@ -1,11 +1,12 @@
 package com.erickWck.ticket_service.service.flightFunctions;
 
-import com.erickWck.ticket_service.dto.flight.FlightDtoRequest;
-import com.erickWck.ticket_service.entity.Aircraft;
-import com.erickWck.ticket_service.entity.Airline;
-import com.erickWck.ticket_service.entity.Flight;
-import com.erickWck.ticket_service.exception.NoAvailableSeatsException;
-import com.erickWck.ticket_service.mapper.FlightMapper;
+import com.erickWck.ticket_service.domain.service.flightFunctions.FlightFunctions;
+import com.erickWck.ticket_service.domain.dto.flight.FlightDtoRequest;
+import com.erickWck.ticket_service.domain.entity.Aircraft;
+import com.erickWck.ticket_service.domain.entity.Airline;
+import com.erickWck.ticket_service.domain.entity.Flight;
+import com.erickWck.ticket_service.domain.exception.NoAvailableSeatsException;
+import com.erickWck.ticket_service.domain.mapper.FlightMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
