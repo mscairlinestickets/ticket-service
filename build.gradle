@@ -51,8 +51,8 @@ dependencies {
 
 
 pitest {
-    targetClasses = ['com.erickWck.ticket_service.service.*']
-    targetTests = ['com.erickWck.ticket_service.service.*']
+    targetClasses = ['com.erickWck.ticket_service.*']
+    targetTests = ['com.erickWck.ticket_service.*']
     excludedMethods = [
             'getAirlineOrThrow',
             'getAircraftOrThrow'

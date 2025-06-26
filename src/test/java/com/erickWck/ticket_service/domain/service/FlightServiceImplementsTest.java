@@ -1,7 +1,6 @@
-package com.erickWck.ticket_service.service;
+package com.erickWck.ticket_service.domain.service;
 
 import com.erickWck.ticket_service.domain.exception.*;
-import com.erickWck.ticket_service.domain.service.FlightServiceImplements;
 import com.erickWck.ticket_service.domain.dto.flight.FlightDtoRequest;
 import com.erickWck.ticket_service.domain.dto.flight.FlightDtoResponse;
 import com.erickWck.ticket_service.domain.entity.Aircraft;
