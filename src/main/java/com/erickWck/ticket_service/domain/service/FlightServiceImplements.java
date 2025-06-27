@@ -120,24 +120,5 @@ public class FlightServiceImplements implements FlightService {
                 .orElseThrow(() -> new AircraftNotFoundException(model));
     }
 
-     /*processar reserva
-    public FlightDtoResponse createFlight(FlightDtoRequest request) {
-
-        log.info("Iniciando criação de voo: {}", request.flightNumber());
-        var airline = getAirlineOrThrow(request.icaoCode());
-        var aircraft = getAircraftOrThrow(request.model());
-
-        Flight flight = FlightMapper.dtoToEntity(request, airline, aircraft);
-
-        FlightFunctions.decrementAvailableSeats(flight);
-        log.info("Assento reservado com sucesso para o voo {}", flight.getAvailableSeats());
-        log.info("Assento reservado com sucesso para o voo {}", flight.getFlightNumber());
-        var result = flightRepository.save(flight);
-
-        log.info("Assento reservado com sucesso para o voo {}", flight.getAvailableSeats());
-        log.info("Voo {} salvo com ID: {}", result.getFlightNumber(), result.getId());
-        return FlightMapper.entityToDto(result);
-    }
-    */
 
 }

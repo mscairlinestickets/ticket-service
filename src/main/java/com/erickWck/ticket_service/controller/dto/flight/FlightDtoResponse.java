@@ -1,6 +1,5 @@
 package com.erickWck.ticket_service.controller.dto.flight;
 
-import com.erickWck.ticket_service.domain.entity.Flight;
 import lombok.Builder;
 
 import java.math.BigDecimal;
@@ -32,10 +31,5 @@ public record FlightDtoResponse(
         int aircraftCapacity
 ) {
 
-    public static FlightDtoResponse entityToDto(Flight flight) {
-        return new FlightDtoResponse(flight.getFlightNumber(), flight.getOrigin(), flight.getDestination(), flight.getDepartureDateTime(),
-                flight.getTotalSeats(), flight.getAvailableSeats(), flight.getPrice(), flight.getAirline().name(),
-                flight.getAirline().icaoCode(), flight.getAircraft().model(), flight.getAircraft().seatCapacity());
-    }
 
 }

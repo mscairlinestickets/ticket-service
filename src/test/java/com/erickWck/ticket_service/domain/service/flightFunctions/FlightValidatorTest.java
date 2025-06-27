@@ -45,7 +45,7 @@ class FlightValidatorTest {
         request = new FlightDtoRequest("LAT123", "GRU", "GIG",
                 LocalDateTime.now().plusMinutes(30), 180, 180, BigDecimal.valueOf(765.99),"TAM", "A320");
         airline = new Airline(1L, "LATAM", "TAM");
-        aircraft = new Aircraft(1L, "A320", 180);
+        aircraft = new Aircraft(1L, "A320", "Airbus",180);
         flight = FlightMapper.dtoToEntity(request, airline, aircraft);
     }
 
@@ -136,7 +136,7 @@ class FlightValidatorTest {
         var request = new FlightDtoRequest("LAT123", "GRU", destination,
                 departureDateTime, 180, 180, BigDecimal.valueOf(265.99),"TAM", "A320");
         var airline = new Airline(1L, "LATAM", "TAM");
-        var aircraft = new Aircraft(1L, "A320", 180);
+        var aircraft = new Aircraft(1L, "A320", "Airbus",180);
         return FlightMapper.dtoToEntity(request, airline, aircraft);
     }
 

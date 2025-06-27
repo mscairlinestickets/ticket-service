@@ -2,20 +2,22 @@ package com.erickWck.ticket_service.domain.entity;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
+import lombok.Builder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
+@Builder(toBuilder = true)
 @Table(name = "aircraft")
 public record Aircraft(
 
         @Id
         Long uuid,
 
-        @NotBlank(message = "Insira o modelo do avião.")
         String model,
 
-        @NotBlank(message = "Insira a capacidade de assento.")
-        @Positive(message = "O assento deve ser maior que zero.")
+        String manufacturer,
+
+
         int seatCapacity
 ) {
 }

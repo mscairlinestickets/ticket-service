@@ -33,7 +33,7 @@ class FlightFunctionsTest {
             request = new FlightDtoRequest("LAT123", "GRU", "GIG",
                     LocalDateTime.now().plusDays(1), 180, 180, BigDecimal.valueOf(585.99), "TAM", "A320");
             airline = new Airline(1L, "LATAM", "TAM");
-            aircraft = new Aircraft(1L, "A320", 180);
+            aircraft = new Aircraft(1L, "A320", "Airbus",180);
             flight = FlightMapper.dtoToEntity(request, airline, aircraft);
         }
 
