@@ -22,6 +22,7 @@ Sistema de **gestão de voos**, com funcionalidades para cadastrar e consultar v
 - JUnit 5 + Mockito
 - Maven
 - Swagger UI
+- PostgreSQL
 - (Inclua aqui: PostgreSQL, Docker, etc. conforme for usando)
 
 ---
