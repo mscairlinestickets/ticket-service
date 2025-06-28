@@ -54,13 +54,12 @@ git clone https://github.com/seu-usuario/ticket-service.git
 # Acessar o diretório
 cd ticket-service
 
-# Rodar com Maven
+# Rodar com gradlew
 ./gradlew bootRun
 
 ```
 ```bash
 ✅ Executar Testes
-bash
 ./gradlew test ou ./gradlew test --info
 Os testes estão divididos em:
 ✅ Unitários: focados em DTOs, controllers,regras de negócio e integração
