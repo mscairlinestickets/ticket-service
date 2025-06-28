@@ -55,3 +55,21 @@ cd ticket-service
 
 # Rodar com Maven
 ./gradlew bootRun
+
+```
+```bash
+✅ Executar Testes
+bash
+./gradlew test ou ./gradlew test --info
+Os testes estão divididos em:
+✅ Unitários: focados em DTOs, controllers,regras de negócio e integração
+```
+
+📦 Deploy
+(Se estiver usando Docker, Railway, Render, CI/CD ou qualquer pipeline, descreva aqui)
+
+👨‍💻 Autor
+Erick Silva – [LinkedIn](https://www.linkedin.com/in/erick-silva-414098225/) e [GitHub](https://github.com/erickknsilva)
+
+
+
