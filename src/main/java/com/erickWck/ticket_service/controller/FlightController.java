@@ -2,38 +2,53 @@ package com.erickWck.ticket_service.controller;
 
 import com.erickWck.ticket_service.controller.dto.flight.FlightDtoResponse;
 import com.erickWck.ticket_service.controller.dto.flight.FlightDtoRequest;
+import com.erickWck.ticket_service.domain.service.contract.FlightService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/ticket")
+@RequestMapping("/api/flights")
 @RestController
 public class FlightController {
 
-    @GetMapping("/api/flights")
-    public List<FlightDtoResponse> listAllFlights() {
-        return null;
-    }
 
-    @GetMapping("/api/flights/{id}")
-    public FlightDtoResponse getFindByIdFlights(long id) {
-        return null;
-    }
+    private FlightService flightService;
 
-    @PostMapping("/api/flights")
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public FlightDtoResponse createNewFlight(@RequestBody @Valid FlightDtoRequest flightRequest) {
-        return null;
+        return flightService.createFlight(flightRequest);
     }
 
-    @PutMapping("/api/flights/{id}")
-    public FlightDtoResponse updateFlightsExist(@PathVariable long id) {
-        return null;
+    public FlightController(FlightService flightService) {
+        this.flightService = flightService;
     }
 
-    @DeleteMapping("/api/flights/{id}")
-    public void deleteFlightsExist(@PathVariable long id) {
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<FlightDtoResponse> listAllFlights() {
+        return flightService.findAllFlight();
+    }
 
+    @GetMapping("/{flightNumber}")
+    @ResponseStatus(HttpStatus.OK)
+    public FlightDtoResponse getFindByIdFlights(@PathVariable @Valid String flightNumber) {
+        return flightService.findFlightNumber(flightNumber);
+    }
+
+    @PutMapping("/{flightNumber}")
+    @ResponseStatus(HttpStatus.OK)
+    public FlightDtoResponse updateFlightsExist(@PathVariable @Valid String flightNumber,
+                                                @RequestBody @Valid FlightDtoRequest request) {
+        return flightService.editFlight(flightNumber, request);
+    }
+
+    @DeleteMapping("/{flightNumber}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteFlightsExist(@PathVariable @Valid String flightNumber) {
+        flightService.delete(flightNumber);
     }
 
 }

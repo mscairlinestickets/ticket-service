@@ -248,7 +248,7 @@ class FlightServiceImplementsTest {
             doReturn(Optional.empty()).when(flightRepository).findByFlightNumber(flyNumber);
 
             //act
-            var messageException = assertThrows(FlightNotFound.class, () -> {
+            var messageException = assertThrows(FlightNotFoundException.class, () -> {
                 flightService.findFlightNumber(flyNumber);
             });
 
@@ -392,7 +392,7 @@ class FlightServiceImplementsTest {
 
             //act
 
-            var messageException = assertThrows(FlightNotFound.class, () -> {
+            var messageException = assertThrows(FlightNotFoundException.class, () -> {
                 flightService.editFlight(flyNumber, request);
             });
 
@@ -442,7 +442,7 @@ class FlightServiceImplementsTest {
             String flyNumber = "LAT123";
 
             //act
-            var messageException = assertThrows(FlightNotFound.class, () -> {
+            var messageException = assertThrows(FlightNotFoundException.class, () -> {
                 flightService.delete(flyNumber);
             });
 
