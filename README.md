@@ -68,8 +68,45 @@ Os testes estão divididos em:
 📦 Deploy
 (Se estiver usando Docker, Railway, Render, CI/CD ou qualquer pipeline, descreva aqui)
 
+---
+
+### 📮 Endpoints da API
+
+#### ✈️ Voos (`/api/flights`)
+
+| Método   | Caminho                        | Descrição                                 | Status Esperado        | Corpo de Resposta                   |
+|----------|-------------------------------|-------------------------------------------|--------------------------|-------------------------------------|
+| `GET`    | `/api/flights`                | Retorna todos os voos                     | `200 OK`                 | Lista de `FlightDtoResponse`        |
+| `GET`    | `/api/flights/{flightNumber}` | Busca um voo pelo número                  | `200 OK` / `404`         | Objeto `FlightDtoResponse` ou erro  |
+| `POST`   | `/api/flights`                | Cria um novo voo                          | `201 Created`            | Objeto `FlightDtoResponse`          |
+| `PUT`    | `/api/flights/{flightNumber}` | Atualiza um voo existente                 | `200 OK` / `404`         | Objeto `FlightDtoResponse`          |
+| `DELETE` | `/api/flights/{flightNumber}` | Remove um voo                             | `204 No Content` / `404` | Nenhum corpo                        |
+
+#### 🛫 Companhias Aéreas (`/api/airlines`)
+
+| Método   | Caminho                         | Descrição                                 | Status Esperado          | Corpo de Resposta               |
+|----------|----------------------------------|-------------------------------------------|---------------------------|----------------------------------|
+| `GET`    | `/api/airlines`                | Retorna todas as companhias aéreas        | `200 OK`                  | Lista de `AirlineDtoResponse`   |
+| `GET`    | `/api/airlines/{icaoCode}`     | Busca companhia aérea pelo código ICAO    | `200 OK` / `404`          | Objeto `AirlineDtoResponse`     |
+| `POST`   | `/api/airlines`                | Cadastra uma nova companhia aérea         | `201 Created`             | Objeto `AirlineDtoResponse`     |
+| `PUT`    | `/api/airlines/{icaoCode}`     | Atualiza uma companhia aérea existente    | `200 OK` / `404`          | Objeto `AirlineDtoResponse`     |
+| `DELETE` | `/api/airlines/{icaoCode}`     | Remove companhia aérea pelo código ICAO   | `204 No Content` / `404`  | Nenhum corpo                    |
+
+#### 🛩️ Aeronaves (`/api/aircraft`)
+
+| Método   | Caminho                         | Descrição                                  | Status Esperado           | Corpo de Resposta               |
+|----------|----------------------------------|--------------------------------------------|----------------------------|----------------------------------|
+| `GET`    | `/api/aircraft`                | Retorna todas as aeronaves cadastradas     | `200 OK`                   | Lista de `AircraftDtoResponse`  |
+| `GET`    | `/api/aircraft/{model}`        | Busca aeronave pelo modelo                 | `200 OK` / `404`           | Objeto `AircraftDtoResponse`    |
+| `POST`   | `/api/aircraft`                | Cadastra uma nova aeronave                 | `201 Created`              | Objeto `AircraftDtoResponse`    |
+| `PUT`    | `/api/aircraft/{model}`        | Atualiza uma aeronave existente            | `200 OK` / `404`           | Objeto `AircraftDtoResponse`    |
+| `DELETE` | `/api/aircraft/{model}`        | Remove aeronave pelo modelo                | `204 No Content` / `404`   | Nenhum corpo                    |
+
+
 👨‍💻 Autor
 Erick Silva – [LinkedIn](https://www.linkedin.com/in/erick-silva-414098225/) e [GitHub](https://github.com/erickknsilva)
+
+
 
 
 
