@@ -8,7 +8,7 @@ import com.erickWck.ticket_service.domain.entity.Flight;
 import com.erickWck.ticket_service.domain.exception.AircraftNotFoundException;
 import com.erickWck.ticket_service.domain.exception.AirlineNotFoundException;
 import com.erickWck.ticket_service.domain.exception.FlightAlreadyExist;
-import com.erickWck.ticket_service.domain.exception.FlightNotFound;
+import com.erickWck.ticket_service.domain.exception.FlightNotFoundException;
 import com.erickWck.ticket_service.domain.mapper.FlightMapper;
 import com.erickWck.ticket_service.domain.repository.AircraftRepository;
 import com.erickWck.ticket_service.domain.repository.AirlineRepository;
@@ -69,7 +69,7 @@ public class FlightServiceImplements implements FlightService {
     public FlightDtoResponse findFlightNumber(String flyNumber) {
 
         return FlightMapper.entityToDto(flightRepository.findByFlightNumber(flyNumber)
-                .orElseThrow(() -> new FlightNotFound(flyNumber))
+                .orElseThrow(() -> new FlightNotFoundException(flyNumber))
         );
     }
 
@@ -100,7 +100,7 @@ public class FlightServiceImplements implements FlightService {
                     flightRepository.save(flightUpdate);
                     return FlightMapper.entityToDto(flightUpdate);
                 })
-                .orElseThrow(() -> new FlightNotFound(flyNumber));
+                .orElseThrow(() -> new FlightNotFoundException(flyNumber));
     }
 
     @Override

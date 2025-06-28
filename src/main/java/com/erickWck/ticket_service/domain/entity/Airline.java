@@ -12,6 +12,7 @@ public record Airline(
         Long id,
         String name,
         String icaoCode
+
 ) {
 
 }

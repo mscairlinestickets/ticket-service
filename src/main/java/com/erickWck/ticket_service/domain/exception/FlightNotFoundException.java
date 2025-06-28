@@ -1,8 +1,8 @@
 package com.erickWck.ticket_service.domain.exception;
 
-public class FlightNotFound extends RuntimeException {
+public class FlightNotFoundException extends RuntimeException {
 
-    public  FlightNotFound(String flyNumber){
+    public FlightNotFoundException(String flyNumber){
         super("Flight with fly number: " + flyNumber + " not found.");
     }
 }

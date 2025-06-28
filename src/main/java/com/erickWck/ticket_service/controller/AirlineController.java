@@ -2,38 +2,52 @@ package com.erickWck.ticket_service.controller;
 
 import com.erickWck.ticket_service.controller.dto.airline.AirlineDtoRequest;
 import com.erickWck.ticket_service.controller.dto.airline.AirlineDtoResponse;
+import com.erickWck.ticket_service.domain.service.contract.AirlineService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/airline")
+@RequestMapping("/api/airlines")
 @RestController
 public class AirlineController {
 
-    @GetMapping("/api/airlines")
-    public List<AirlineDtoResponse> listAllAirlines(){
-        return null;
+    private final AirlineService airlineService;
+
+    public AirlineController(AirlineService airlineService) {
+        this.airlineService = airlineService;
     }
 
-    @GetMapping("/api/airlines/{id}")
-    public AirlineDtoResponse getFindByIdAirlines(long id){
-        return null;
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED) // 201 –
+    public AirlineDtoResponse createNewAirlines(@RequestBody @Valid AirlineDtoRequest airlineRequest) {
+        return airlineService.createAirline(airlineRequest);
     }
 
-    @PostMapping("/api/airlines")
-    public AirlineDtoResponse createNewAirlines(@RequestBody @Valid AirlineDtoRequest airlineRequest){
-        return null;
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK) // 200
+    public List<AirlineDtoResponse> listAllAirlines() {
+        return airlineService.findAllAirline();
     }
 
-    @PutMapping("/api/airlines/{id}")
-    public AirlineDtoResponse updateAirlinesExist(@PathVariable long id){
-        return null;
+    @GetMapping("/{icaoCode}")
+    @ResponseStatus(HttpStatus.OK) // 200
+    public AirlineDtoResponse getFindByIdAirlines(@PathVariable @Valid String icaoCode) {
+        return airlineService.findByAirline(icaoCode);
     }
 
-    @DeleteMapping("/api/airlines/{id}")
-    public void deleteAirlinesExist(@PathVariable long id){
+    @PutMapping("/{icaoCode}")
+    @ResponseStatus(HttpStatus.OK) // 200
+    public AirlineDtoResponse updateAirlinesExist(@PathVariable @Valid String icaoCode, @RequestBody @Valid AirlineDtoRequest request) {
+        return airlineService.editAirline(icaoCode, request);
+    }
 
+    @DeleteMapping("/{icaoCode}")
+    @ResponseStatus(HttpStatus.NO_CONTENT) // 204
+    public void deleteAirlinesExist(@PathVariable @Valid String icaoCode) {
+        airlineService.delete(icaoCode);
     }
 
 }
+

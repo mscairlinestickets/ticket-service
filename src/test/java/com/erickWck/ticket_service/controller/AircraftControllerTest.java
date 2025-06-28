@@ -147,7 +147,7 @@ class AircraftControllerTest {
             //arrange
             String model = "AirbusA320";
             var request = new AircraftDtoRequest("Airbus A320", "Airbus", 186);
-            var response = new AircraftDtoResponse("Airbus A320", "Airbus", 186);
+            var response = new AircraftDtoResponse("Airbus A30", "Airbus", 118);
 
             when(aircraftService.editAircraft(model, request)).thenReturn(response);
             //act e assert
@@ -213,4 +213,65 @@ class AircraftControllerTest {
                     .andExpect(content().string("Aircraft with model: " + model + " not found."));
         }
     }
+
+    @Nested
+    @DisplayName("POST /api/aircrafts – validação de campos")
+    class CreateAircraftValidationTests {
+
+        private final String endpoint = "/api/aircrafts";
+
+        @Test
+        @DisplayName("Deve retornar 400 quando model está vazio")
+        void shouldReturn400WhenModelIsBlank() throws Exception {
+            var json = """
+                        {
+                            "model": "",
+                            "manufacturer": "Boeing",
+                            "seatCapacity": 180
+                        }
+                    """;
+
+            mockMvc.perform(post(endpoint)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(json))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.model").value("O modelo da aeronave é obrigatório"));
+        }
+
+        @Test
+        @DisplayName("Deve retornar 400 quando manufacturer está nulo")
+        void shouldReturn400WhenManufacturerIsNull() throws Exception {
+            var json = """
+                        {
+                            "model": "737 MAX",
+                            "seatCapacity": 200
+                        }
+                    """;
+
+            mockMvc.perform(post(endpoint)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(json))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.manufacturer").value("O fabricante da aeronave é obrigatório"));
+        }
+
+        @Test
+        @DisplayName("Deve retornar 400 quando seatCapacity for zero ou negativo")
+        void shouldReturn400WhenSeatCapacityIsNotPositive() throws Exception {
+            var json = """
+                        {
+                            "model": "737 MAX",
+                            "manufacturer": "Boeing",
+                            "seatCapacity": 0
+                        }
+                    """;
+
+            mockMvc.perform(post(endpoint)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(json))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.seatCapacity").value("A capacidade de assento deve ser maior que 0"));
+        }
+    }
+
 }
