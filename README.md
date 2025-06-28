@@ -65,8 +65,28 @@ Os testes estão divididos em:
 ✅ Unitários: focados em DTOs, controllers,regras de negócio e integração
 ```
 
-📦 Deploy
-(Se estiver usando Docker, Railway, Render, CI/CD ou qualquer pipeline, descreva aqui)
+## 📦 Deploy
+
+Este projeto utiliza **GitHub Actions** para integração contínua e publicação automatizada de imagens de container.
+
+### 🔁 Pipeline CI/CD: `Commit Stage`
+
+- A cada `push`, o pipeline executa:
+  - **Build do projeto** com Gradle
+  - **Testes unitários e de mutação (PITest)**
+  - **Escaneamento de vulnerabilidades** no código e na imagem gerada
+  - **Construção da imagem Docker** via `bootBuildImage`
+  - **Publicação da imagem no GitHub Container Registry (GHCR)**
+
+### 🐳 Imagem Docker
+
+A imagem gerada é publicada com as tags:
+- `${{ github.sha }}` → commit hash atual
+- `latest` → para referência da versão mais recente
+
+Voce pode encontra a imagem publicada neste link ou na branch main: 
+https://github.com/mscairlinestickets?tab=packages
+
 
 ---
 
