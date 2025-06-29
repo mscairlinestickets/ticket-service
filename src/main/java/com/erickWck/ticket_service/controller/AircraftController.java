@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @RestController
 @RequestMapping("/api/aircrafts")
 public class AircraftController {
@@ -19,6 +20,12 @@ public class AircraftController {
         this.aircraftService = aircraftService;
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public AircraftDtoResponse createNewAircraft(@RequestBody @Valid AircraftDtoRequest aircraftRequest) {
+        return aircraftService.createAircraft(aircraftRequest);
+    }
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<AircraftDtoResponse> listAllAircrafts() {
@@ -27,19 +34,13 @@ public class AircraftController {
 
     @GetMapping("/{model}")
     @ResponseStatus(HttpStatus.OK)
-    public AircraftDtoResponse getAircraftByModel(@PathVariable @Valid String model) {
+    public AircraftDtoResponse findAircraftDetails(@PathVariable @Valid String model) {
         return aircraftService.findByModelAircraft(model);
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public AircraftDtoResponse createNewAircraft(@RequestBody @Valid AircraftDtoRequest aircraftRequest) {
-        return aircraftService.createAircraft(aircraftRequest);
     }
 
     @PutMapping("/{model}")
     @ResponseStatus(HttpStatus.OK)
-    public AircraftDtoResponse updateAircraft(@PathVariable String model,
+    public AircraftDtoResponse editAircraft(@PathVariable String model,
                                               @RequestBody @Valid AircraftDtoRequest aircraftRequest) {
         return aircraftService.editAircraft(model, aircraftRequest);
     }
@@ -49,5 +50,8 @@ public class AircraftController {
     public void deleteAircraft(@PathVariable @Valid String model) {
         aircraftService.deleteAircraft(model);
     }
+
+
+
 }
 

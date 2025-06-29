@@ -63,10 +63,13 @@ public class AircraftServiceImplements implements AircraftService {
         return aircraftRepository.findByModel(model)
                 .map(existAir -> {
                     var aircraft = Aircraft.builder()
-                            .uuid(existAir.uuid())
+                            .uuid(existAir.getUuid())
                             .model(request.model())
                             .manufacturer(request.manufacturer())
                             .seatCapacity(request.seatCapacity())
+                            .createdDate(existAir.getCreatedDate())
+                            .lastModifiedDate(existAir.getLastModifiedDate())
+                            .version(existAir.getVersion())
                             .build();
                     aircraftRepository.save(aircraft);
                     log.info("Aeronave editada com sucesso: {}", aircraft);

@@ -40,9 +40,5 @@ public record FlightDtoRequest(
 
 ) {
 
-    public static Flight dtoToEntity(FlightDtoRequest request) {
-        return new Flight(null, request.flightNumber, request.origin, request.destination, request.departureDateTime,
-                request.totalSeats, request.availableSeats, request.price, null, null);
-    }
 
 }

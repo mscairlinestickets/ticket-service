@@ -133,7 +133,7 @@ class AircraftControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isUnprocessableEntity())
-                    .andExpect(content().string("Aircraft with mode: " + model + " already exist."));
+                    .andExpect(content().string("Aircraft with model: " + model + " already exist."));
         }
     }
 

@@ -46,7 +46,6 @@ public class GlobalExceptionHandler {
         return ex.getMessage();
     }
 
-
     @ExceptionHandler(AirlineAlreadyExist.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     String airlineAlreadyExistHandler(AirlineAlreadyExist ex) {
@@ -62,6 +61,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(FlightNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     String flightNotFoundHandler(FlightNotFoundException ex) {
+        return ex.getMessage();
+    }
+
+    @ExceptionHandler(BusinessRuleException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    String businessRuleExceptionHandler(BusinessRuleException ex) {
         return ex.getMessage();
     }
 

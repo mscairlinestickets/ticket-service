@@ -1,21 +1,28 @@
 package com.erickWck.ticket_service.domain.entity;
 
+import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
 
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-@EqualsAndHashCode
+@Entity
 @Table(name = "flight")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode
+@EntityListeners(AuditingEntityListener.class)
 public class Flight {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String flightNumber;
@@ -31,15 +38,22 @@ public class Flight {
     private int availableSeats;
 
     private BigDecimal price;
-    // Relação com a companhia aérea
-//        @ManyToOne(optional = false)
-//        @JoinColumn(name = "airline_id")
+
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "airline", referencedColumnName = "id")
     private Airline airline;
 
-    // Relação com o avião
-//        @ManyToOne(optional = false)
-//        @JoinColumn(name = "aircraft_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "aircraft", referencedColumnName = "uuid")
     private Aircraft aircraft;
 
+    @CreatedDate
+    private Instant createdDate;
 
+    @LastModifiedDate
+    private Instant lastModifiedDate;
+
+    @Version
+    private int version;
 }

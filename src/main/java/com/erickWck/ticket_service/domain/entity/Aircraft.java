@@ -1,23 +1,41 @@
 package com.erickWck.ticket_service.domain.entity;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-@Builder(toBuilder = true)
+import java.time.Instant;
+
+@Entity
 @Table(name = "aircraft")
-public record Aircraft(
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@EntityListeners(AuditingEntityListener.class)
+public class Aircraft {
 
-        @Id
-        Long uuid,
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long uuid;
 
-        String model,
+    private String model;
 
-        String manufacturer,
+    private String manufacturer;
 
+    private int seatCapacity;
 
-        int seatCapacity
-) {
+    @CreatedDate
+    private Instant createdDate;
+
+    @LastModifiedDate
+    private Instant lastModifiedDate;
+
+    @Version
+    private int version;
 }

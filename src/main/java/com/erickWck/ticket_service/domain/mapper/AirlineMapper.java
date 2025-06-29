@@ -7,10 +7,10 @@ import com.erickWck.ticket_service.domain.entity.Airline;
 public class AirlineMapper {
 
     public static AirlineDtoResponse entityToDto(Airline airline) {
-        return new AirlineDtoResponse(airline.name(), airline.icaoCode());
+        return new AirlineDtoResponse(airline.getName(), airline.getIcaoCode());
     }
 
     public static Airline createAirline(AirlineDtoRequest request) {
-        return new Airline(null, request.name(), request.iacaoCode());
+        return new Airline(null, request.name(), request.icaoCode(),null,null,0);
     }
 }

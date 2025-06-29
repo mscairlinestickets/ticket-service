@@ -63,8 +63,8 @@ class FlightServiceImplementsTest {
         void setup() {
             request = new FlightDtoRequest("LAT123", "GRU", "GIG", LocalDateTime.now().plusDays(1),
                     180, 180, BigDecimal.valueOf(585.99), "TAM", "A320");
-            airline = new Airline(1L, "LATAM", "TAM");
-            aircraft = new Aircraft(1L, "A320", "Airbus",180);
+            airline = new Airline(1L, "LATAM", "TAM",null,null,0);
+            aircraft = new Aircraft(1L, "A320", "Airbus",180,null,null,0);
             flight = FlightMapper.dtoToEntity(request, airline, aircraft);
 
         }
@@ -73,7 +73,7 @@ class FlightServiceImplementsTest {
         void shouldCreateFlightWhenDoesNotExist() {
             //arrange
             when(airLineRepository.findByIcaoCode(request.icaoCode())).thenReturn(Optional.of(airline));
-            when(aircraftRepository.findByModel(aircraft.model())).thenReturn(Optional.of(aircraft));
+            when(aircraftRepository.findByModel(aircraft.getModel())).thenReturn(Optional.of(aircraft));
             when(flightRepository.save(any(Flight.class))).thenReturn(flight);
 
             //act
@@ -121,7 +121,7 @@ class FlightServiceImplementsTest {
         void shouldThrowBusinessRuleExceptionWhenExistsByFlightNumberAndDepartureDateTimeAndDestination() {
             //arrange
             when(airLineRepository.findByIcaoCode(request.icaoCode())).thenReturn(Optional.of(airline));
-            when(aircraftRepository.findByModel(aircraft.model())).thenReturn(Optional.of(aircraft));
+            when(aircraftRepository.findByModel(aircraft.getModel())).thenReturn(Optional.of(aircraft));
             doThrow(new BusinessRuleException("Já existe um voo com esse número e horário para outro destino.")).when(flightValidator).validateFlight(any(Flight.class));
             //act
             var messageException = assertThrows(BusinessRuleException.class, () -> {
@@ -138,8 +138,8 @@ class FlightServiceImplementsTest {
             // arrange
             var dtoRequest = new FlightDtoRequest("GOL123", "REU", "AIG", LocalDateTime.now().minusMinutes(5), 180, 180, BigDecimal.valueOf(342.99), "GOL", "B320");
 
-            var airline = new Airline(1L, "GOL", "GOL");
-            var aircraft = new Aircraft(1L, "B320", "Airbus",180);
+            var airline = new Airline(1L, "GOL", "GOL",null,null,0);
+            var aircraft = new Aircraft(1L, "B320", "Airbus",180,null,null,0);
 
             when(airLineRepository.findByIcaoCode("GOL")).thenReturn(Optional.of(airline));
             when(aircraftRepository.findByModel("B320")).thenReturn(Optional.of(aircraft));
@@ -157,8 +157,8 @@ class FlightServiceImplementsTest {
             // arrange
             var dtoRequest = new FlightDtoRequest("GOL123", "REU", "AIG", LocalDateTime.now().plusDays(1), 180, 180, BigDecimal.valueOf(342.99), "GOL", "B320");
 
-            var airline = new Airline(1L, "GOL", "GOL");
-            var aircraft = new Aircraft(1L, "B320", "Airbus",180);
+            var airline = new Airline(1L, "GOL", "GOL",null,null,0);
+            var aircraft = new Aircraft(1L, "B320", "Airbus",180,null,null,0);
 
             when(airLineRepository.findByIcaoCode("GOL")).thenReturn(Optional.of(airline));
             when(aircraftRepository.findByModel("B320")).thenReturn(Optional.of(aircraft));
@@ -181,10 +181,10 @@ class FlightServiceImplementsTest {
                     () -> assertEquals(request.totalSeats(), result.totalSeats()),
                     () -> assertEquals(request.availableSeats(), result.availableSeats()),
                     () -> assertEquals(request.price(), result.price()),
-                    () -> assertEquals(airline.name(), result.airlineName()),
-                    () -> assertEquals(airline.icaoCode(), result.icaoCode()),
-                    () -> assertEquals(aircraft.model(), result.aircraftModel()),
-                    () -> assertEquals(aircraft.seatCapacity(), result.aircraftCapacity()));
+                    () -> assertEquals(airline.getName(), result.airlineName()),
+                    () -> assertEquals(airline.getIcaoCode(), result.icaoCode()),
+                    () -> assertEquals(aircraft.getModel(), result.aircraftModel()),
+                    () -> assertEquals(aircraft.getSeatCapacity(), result.aircraftCapacity()));
         }
 
 
@@ -201,8 +201,8 @@ class FlightServiceImplementsTest {
         @BeforeEach
         void setup() {
             request = new FlightDtoRequest("LAT123", "GRU", "GIG", LocalDateTime.now().plusDays(1), 180, 180, BigDecimal.valueOf(585.99), "TAM", "A320");
-            airline = new Airline(1L, "LATAM", "TAM");
-            aircraft = new Aircraft(1L, "A320", "Airbus",180);
+            airline = new Airline(1L, "LATAM", "TAM",null,null,0);
+            aircraft = new Aircraft(1L, "A320", "Airbus",180,null,null,0);
             flight = FlightMapper.dtoToEntity(request, airline, aircraft);
 
         }
@@ -266,10 +266,10 @@ class FlightServiceImplementsTest {
                     () -> assertEquals(request.totalSeats(), result.totalSeats()),
                     () -> assertEquals(request.availableSeats(), result.availableSeats()),
                     () -> assertEquals(request.price(), result.price()),
-                    () -> assertEquals(airline.name(), result.airlineName()),
-                    () -> assertEquals(airline.icaoCode(), result.icaoCode()),
-                    () -> assertEquals(aircraft.model(), result.aircraftModel()),
-                    () -> assertEquals(aircraft.seatCapacity(), result.aircraftCapacity()));
+                    () -> assertEquals(airline.getName(), result.airlineName()),
+                    () -> assertEquals(airline.getIcaoCode(), result.icaoCode()),
+                    () -> assertEquals(aircraft.getModel(), result.aircraftModel()),
+                    () -> assertEquals(aircraft.getSeatCapacity(), result.aircraftCapacity()));
         }
     }
 
@@ -284,8 +284,8 @@ class FlightServiceImplementsTest {
         @BeforeEach
         void setup() {
             request = new FlightDtoRequest("LAT123", "GRU", "GIG", LocalDateTime.now().plusDays(1), 180, 180, BigDecimal.valueOf(585.99), "TAM", "A320");
-            airline = new Airline(1L, "LATAM", "TAM");
-            aircraft = new Aircraft(1L, "A320", "Airbus",180);
+            airline = new Airline(1L, "LATAM", "TAM",null,null,0);
+            aircraft = new Aircraft(1L, "A320", "Airbus",180,null,null,0);
             flight = FlightMapper.dtoToEntity(request, airline, aircraft);
         }
 
@@ -294,8 +294,8 @@ class FlightServiceImplementsTest {
             //arrange
             var flightRequest = new FlightDtoRequest("GOL987", "CGH", "BSB", LocalDateTime.now().plusDays(2),
                     150, 150, BigDecimal.valueOf(439.90), "GOL", "B737");
-            var airline2 = new Airline(2L, "GOL Linhas Aéreas", "GOL");
-            var aircraft2 = new Aircraft(2L, "B737", "Airbus",150);
+            var airline2 = new Airline(2L, "GOL Linhas Aéreas", "GOL",null,null,0);
+            var aircraft2 = new Aircraft(2L, "B737", "Airbus",150,null,null,0);
             var flight2 = FlightMapper.dtoToEntity(flightRequest, airline2, aircraft2);
 
             List<Flight> list = new ArrayList<>();
@@ -342,8 +342,8 @@ class FlightServiceImplementsTest {
         void setup() {
             request = new FlightDtoRequest("LAT123", "GRU", "GIG", LocalDateTime.now().plusDays(1), 180,
                     180, BigDecimal.valueOf(585.99), "TAM", "A320");
-            airline = new Airline(1L, "LATAM", "TAM");
-            aircraft = new Aircraft(1L, "A320", "Airbus",180);
+            airline = new Airline(1L, "LATAM", "TAM",null,null,0);
+            aircraft = new Aircraft(1L, "A320", "Airbus",180,null,null,0);
             flight = FlightMapper.dtoToEntity(request, airline, aircraft);
         }
 
@@ -357,8 +357,8 @@ class FlightServiceImplementsTest {
                     170, 160, BigDecimal.valueOf(339.90), "TAM", "A320"
             );
 
-            var existingAirline = new Airline(1L, "LATAM", "TAM");
-            var existingAircraft = new Aircraft(1L, "A320", "Airbus",180);
+            var existingAirline = new Airline(1L, "LATAM", "TAM",null,null,0);
+            var existingAircraft = new Aircraft(1L, "A320", "Airbus",180,null,null,0);
 
             var existingFlight = Flight.builder()
                     .id(1L).flightNumber(flyNumber).origin("GRU").destination("GIG")
@@ -417,8 +417,8 @@ class FlightServiceImplementsTest {
         void setup() {
             request = new FlightDtoRequest("LAT123", "GRU", "GIG", LocalDateTime.now().plusDays(1), 180,
                     180, BigDecimal.valueOf(585.99), "TAM", "A320");
-            airline = new Airline(1L, "LATAM", "TAM");
-            aircraft = new Aircraft(1L, "A320", "Airbus",180);
+            airline = new Airline(1L, "LATAM", "TAM",null,null,0);
+            aircraft = new Aircraft(1L, "A320", "Airbus",180,null,null,0);
             flight = FlightMapper.dtoToEntity(request, airline, aircraft);
         }
 

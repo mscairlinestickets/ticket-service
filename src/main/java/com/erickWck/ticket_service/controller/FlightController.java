@@ -34,7 +34,7 @@ public class FlightController {
 
     @GetMapping("/{flightNumber}")
     @ResponseStatus(HttpStatus.OK)
-    public FlightDtoResponse getFindByIdFlights(@PathVariable @Valid String flightNumber) {
+    public FlightDtoResponse findFlightDetails(@PathVariable @Valid String flightNumber) {
         return flightService.findFlightNumber(flightNumber);
     }
 

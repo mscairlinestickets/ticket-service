@@ -8,18 +8,18 @@ import com.erickWck.ticket_service.domain.entity.Flight;
 
 public class FlightMapper {
 
-    public static Flight dtoToEntity(FlightDtoRequest dto, Airline airline, Aircraft aircraft) {
+    public static Flight dtoToEntity(FlightDtoRequest request, Airline airline, Aircraft aircraft) {
         return new Flight(
                 null,
-                dto.flightNumber(),
-                dto.origin(),
-                dto.destination(),
-                dto.departureDateTime(),
-                dto.totalSeats(),
-                dto.availableSeats(),
-                dto.price(),
+                request.flightNumber(),
+                request.origin(),
+                request.destination(),
+                request.departureDateTime(),
+                request.totalSeats(),
+                request.availableSeats(),
+                request.price(),
                 airline,
-                aircraft
+                aircraft, null, null, 0
         );
     }
 
@@ -32,10 +32,10 @@ public class FlightMapper {
                 flight.getTotalSeats(),
                 flight.getAvailableSeats(),
                 flight.getPrice(),
-                flight.getAirline().name(),
-                flight.getAirline().icaoCode(),
-                flight.getAircraft().model(),
-                flight.getAircraft().seatCapacity()
+                flight.getAirline().getName(),
+                flight.getAirline().getIcaoCode(),
+                flight.getAircraft().getModel(),
+                flight.getAircraft().getSeatCapacity()
         );
     }
 }

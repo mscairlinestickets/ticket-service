@@ -51,10 +51,9 @@ public class FlightServiceImplements implements FlightService {
         Flight flight = FlightMapper.dtoToEntity(request, airline, aircraft);
 
         flightValidator.validateFlight(flight);
-
         var existFly = flightRepository.findByFlightNumber(request.flightNumber());
 
-        if (existFly.isPresent()){
+        if (existFly.isPresent()) {
             throw new FlightAlreadyExist(request.flightNumber());
         }
 
@@ -96,6 +95,9 @@ public class FlightServiceImplements implements FlightService {
                             .price(request.price())
                             .airline(existFly.getAirline())
                             .aircraft(existFly.getAircraft())
+                            .createdDate(existFly.getCreatedDate())
+                            .lastModifiedDate(existFly.getLastModifiedDate())
+                            .version(existFly.getVersion())
                             .build();
                     flightRepository.save(flightUpdate);
                     return FlightMapper.entityToDto(flightUpdate);

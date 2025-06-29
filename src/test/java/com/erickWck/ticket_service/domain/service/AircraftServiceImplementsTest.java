@@ -44,8 +44,8 @@ class AircraftServiceImplementsTest {
         @DisplayName("Listagem de todos aviões cadastrado.")
         void shouldListAllAircraft() {
             //arrange
-            var aircraft = new Aircraft(1L, "Air ceb", "Airbus", 150);
-            var aircraft2 = new Aircraft(2L, "Boeing falk", "Airbus", 150);
+            var aircraft = new Aircraft(1L, "Air ceb", "Airbus", 150,null,null,0);
+            var aircraft2 = new Aircraft(2L, "Boeing falk", "Airbus", 150,null,null,0);
             var list = new ArrayList<>(List.of(aircraft, aircraft2));
             when(aircraftRepository.findAll()).thenReturn(list);
 
@@ -54,10 +54,10 @@ class AircraftServiceImplementsTest {
 
             //assert
             assertEquals(2, result.size());
-            assertEquals(aircraft.model(), result.get(0).model());
-            assertEquals(aircraft.seatCapacity(), result.get(0).seatCapacity());
-            assertEquals(aircraft2.model(), result.get(1).model());
-            assertEquals(aircraft2.seatCapacity(), result.get(1).seatCapacity());
+            assertEquals(aircraft.getModel(), result.get(0).model());
+            assertEquals(aircraft.getSeatCapacity(), result.get(0).seatCapacity());
+            assertEquals(aircraft2.getModel(), result.get(1).model());
+            assertEquals(aircraft2.getSeatCapacity(), result.get(1).seatCapacity());
 
         }
 
@@ -89,7 +89,7 @@ class AircraftServiceImplementsTest {
         void shouldReturnAircraftWhenExist() {
             //arrange
             String model = "Air ceb";
-            Aircraft aircraft = new Aircraft(1L, model, "Airbus",150);
+            Aircraft aircraft = new Aircraft(1L, model, "Airbus",150,null,null,0);
             when(aircraftRepository.findByModel(model)).thenReturn(Optional.of(aircraft));
 
             //act
@@ -97,8 +97,8 @@ class AircraftServiceImplementsTest {
 
             //assert
             assertNotNull(result);
-            assertEquals(aircraft.model(), result.model());
-            assertEquals(aircraft.seatCapacity(), result.seatCapacity());
+            assertEquals(aircraft.getModel(), result.model());
+            assertEquals(aircraft.getSeatCapacity(), result.seatCapacity());
             verify(aircraftRepository, times(1)).findByModel(model);
 
         }
@@ -108,7 +108,7 @@ class AircraftServiceImplementsTest {
         void shouldThrowAircraftNotFoundExceptionWhenDoesNotExist() {
             //arrange
             String model = "Air ceb";
-            Aircraft aircraft = new Aircraft(1L, model, "Airbus",150);
+            Aircraft aircraft = new Aircraft(1L, model, "Airbus",150,null,null,0);
             when(aircraftRepository.findByModel(model)).thenReturn(Optional.empty());
 
             //act
@@ -132,7 +132,7 @@ class AircraftServiceImplementsTest {
         void shouldEditAircraftWhenExist() {
             //arrange
             String model = "Air ceb";
-            Aircraft aircraft = new Aircraft(1L, model, "Airbus",150);
+            Aircraft aircraft = new Aircraft(1L, model, "Airbus",150,null,null,0);
             AircraftDtoRequest request = new AircraftDtoRequest(model, "Airbus",189);
 
             when(aircraftRepository.findByModel(model)).thenReturn(Optional.of(aircraft));
@@ -144,9 +144,9 @@ class AircraftServiceImplementsTest {
             //assert
             verify(aircraftRepository, times(1)).save(argumentCaptor.capture());
             var captured = argumentCaptor.getValue();
-            assertEquals(airUpdate.model(), captured.model());
-            assertEquals(airUpdate.seatCapacity(), captured.seatCapacity());
-            assertEquals(aircraft.uuid(), captured.uuid());
+            assertEquals(airUpdate.model(), captured.getModel());
+            assertEquals(airUpdate.seatCapacity(), captured.getSeatCapacity());
+            assertEquals(aircraft.getUuid(), captured.getUuid());
         }
 
 
@@ -180,7 +180,7 @@ class AircraftServiceImplementsTest {
         void shouldDeleteAircraftWhenExists() {
             //arrange
             String model = "AERB";
-            Aircraft aircraft = new Aircraft(1L, model, "Airbus",150);
+            Aircraft aircraft = new Aircraft(1L, model, "Airbus",150,null,null,0);
             when(aircraftRepository.findByModel(model)).thenReturn(Optional.of(aircraft));
             doNothing().when(aircraftRepository).deleteByModel(model);
 
@@ -217,7 +217,7 @@ class AircraftServiceImplementsTest {
         void shouldReturnCreatedAircraftWhenDoesNotExist() {
             //arrange
             String model = "Air ceb";
-            Aircraft aircraft = new Aircraft(1L, model, "Airbus",150);
+            Aircraft aircraft = new Aircraft(1L, model, "Airbus",150,null,null,0);
             AircraftDtoRequest request = new AircraftDtoRequest(model, "Airbus",150);
             when(aircraftRepository.save(any(Aircraft.class))).thenReturn(aircraft);
 
@@ -228,8 +228,8 @@ class AircraftServiceImplementsTest {
             verify(aircraftRepository, times(1)).save(argumentCaptor.capture());
             var captured = argumentCaptor.getValue();
             assertNotNull(captured);
-            assertEquals(result.model(), captured.model());
-            assertEquals(result.seatCapacity(), captured.seatCapacity());
+            assertEquals(result.model(), captured.getModel());
+            assertEquals(result.seatCapacity(), captured.getSeatCapacity());
 
 
         }
@@ -239,7 +239,7 @@ class AircraftServiceImplementsTest {
         void shouldThrowAircraftAlreadyExceptionWhenExist() {
             //arrange
             String model = "Air ceb";
-            Aircraft aircraft = new Aircraft(1L, model, "Airbus",150);
+            Aircraft aircraft = new Aircraft(1L, model, "Airbus",150,null,null,0);
             AircraftDtoRequest request = new AircraftDtoRequest(model, "Airbus",150);
             when(aircraftRepository.findByModel(model)).thenReturn(Optional.of(aircraft));
 
@@ -249,7 +249,7 @@ class AircraftServiceImplementsTest {
                 aircraftService.createAircraft(request);
             })
                     .isInstanceOf(AircraftAlreadyException.class)
-                    .hasMessage("Aircraft with mode: Air ceb already exist.");
+                    .hasMessage("Aircraft with model: Air ceb already exist.");
 
             //assert
             assertNotNull(messageException);

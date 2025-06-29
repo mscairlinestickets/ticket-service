@@ -26,10 +26,10 @@ public class AirlineServiceImplements implements AirlineService {
 
     @Override
     public AirlineDtoResponse createAirline(AirlineDtoRequest request) {
-        var existAir = airlineRepository.findByIcaoCode(request.iacaoCode());
+        var existAir = airlineRepository.findByIcaoCode(request.icaoCode());
         if (existAir.isPresent()) {
-            log.warn("Falha ao criar companhia aérea: ICAO {} já existente.", request.iacaoCode());
-            throw new AirlineAlreadyExist(request.iacaoCode());
+            log.warn("Falha ao criar companhia aérea: ICAO {} já existente.", request.icaoCode());
+            throw new AirlineAlreadyExist(request.icaoCode());
         }
 
         var airline = airlineRepository.save(AirlineMapper.createAirline(request));
@@ -63,9 +63,12 @@ public class AirlineServiceImplements implements AirlineService {
         return airlineRepository.findByIcaoCode(icaoCode)
                 .map(airExist -> {
                     var airline = Airline.builder()
-                            .id(airExist.id())
+                            .id(airExist.getId())
                             .name(request.name())
-                            .icaoCode(airExist.icaoCode())
+                            .icaoCode(airExist.getIcaoCode())
+                            .createdDate(airExist.getCreatedDate())
+                            .lastModifiedDate(airExist.getLastModifiedDate())
+                            .version(airExist.getVersion())
                             .build();
                     airlineRepository.save(airline);
                     log.info("Companhia aérea editada com sucesso: {}", airline);

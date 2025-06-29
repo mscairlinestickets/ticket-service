@@ -20,31 +20,31 @@ public class AirlineController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED) // 201 –
+    @ResponseStatus(HttpStatus.CREATED)
     public AirlineDtoResponse createNewAirlines(@RequestBody @Valid AirlineDtoRequest airlineRequest) {
         return airlineService.createAirline(airlineRequest);
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK) // 200
+    @ResponseStatus(HttpStatus.OK)
     public List<AirlineDtoResponse> listAllAirlines() {
         return airlineService.findAllAirline();
     }
 
     @GetMapping("/{icaoCode}")
-    @ResponseStatus(HttpStatus.OK) // 200
+    @ResponseStatus(HttpStatus.OK)
     public AirlineDtoResponse getFindByIdAirlines(@PathVariable @Valid String icaoCode) {
         return airlineService.findByAirline(icaoCode);
     }
 
     @PutMapping("/{icaoCode}")
-    @ResponseStatus(HttpStatus.OK) // 200
+    @ResponseStatus(HttpStatus.OK)
     public AirlineDtoResponse updateAirlinesExist(@PathVariable @Valid String icaoCode, @RequestBody @Valid AirlineDtoRequest request) {
         return airlineService.editAirline(icaoCode, request);
     }
 
     @DeleteMapping("/{icaoCode}")
-    @ResponseStatus(HttpStatus.NO_CONTENT) // 204
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAirlinesExist(@PathVariable @Valid String icaoCode) {
         airlineService.delete(icaoCode);
     }

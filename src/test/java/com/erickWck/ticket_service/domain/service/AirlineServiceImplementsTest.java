@@ -39,7 +39,7 @@ class AirlineServiceImplementsTest {
 
         @BeforeEach
         void setup() {
-            airline = new Airline(1L, "Fly Cell", "FLC");
+            airline = new Airline(1L, "Fly Cell", "FLC",null,null,0);
         }
 
         @Test
@@ -47,7 +47,7 @@ class AirlineServiceImplementsTest {
         void shouldListWhenAirlineExists() {
             //arrange
             List<Airline> list = new ArrayList<>();
-            Airline airline2 = new Airline(1L, "Airbus One", "ABO");
+            Airline airline2 = new Airline(1L, "Airbus One", "ABO",null,null,0);
             list.add(airline);
             list.add(airline2);
             when(airlineRepository.findAll()).thenReturn(list);
@@ -57,10 +57,10 @@ class AirlineServiceImplementsTest {
 
             //assert
             assertEquals(2, list.size());
-            assertEquals(airline.name(), resultList.get(0).name());
-            assertEquals(airline.name(), resultList.get(0).name());
-            assertEquals(airline2.name(), resultList.get(1).name());
-            assertEquals(airline2.icaoCode(), resultList.get(1).icaoCode());
+            assertEquals(airline.getName(), resultList.get(0).name());
+            assertEquals(airline.getIcaoCode(), resultList.get(0).icaoCode());
+            assertEquals(airline2.getName(), resultList.get(1).name());
+            assertEquals(airline2.getIcaoCode(), resultList.get(1).icaoCode());
 
         }
 
@@ -88,7 +88,7 @@ class AirlineServiceImplementsTest {
 
         @BeforeEach
         void setup() {
-            airline = new Airline(1L, "Fly Cell", "FLC");
+            airline = new Airline(1L, "Fly Cell", "FLC",null,null,0);
         }
 
         @Test
@@ -101,8 +101,8 @@ class AirlineServiceImplementsTest {
             var result = airlineService.findByAirline(iacao);
 
             assertNotNull(result);
-            assertEquals(airline.name(), result.name());
-            assertEquals(airline.icaoCode(), result.icaoCode());
+            assertEquals(airline.getName(), result.name());
+            assertEquals(airline.getIcaoCode(), result.icaoCode());
         }
 
         @Test
@@ -132,7 +132,7 @@ class AirlineServiceImplementsTest {
 
         @BeforeEach
         void setup() {
-            airline = new Airline(1L, "Fly Cell", "FLC");
+            airline = new Airline(1L, "Fly Cell", "FLC",null,null,0);
         }
 
         @Test
@@ -172,7 +172,7 @@ class AirlineServiceImplementsTest {
 
         @BeforeEach
         void setup() {
-            airline = new Airline(1L, "Fly Cell", "FLC");
+            airline = new Airline(1L, "Fly Cell", "FLC",null,null,0);
         }
 
         @Test
@@ -183,7 +183,7 @@ class AirlineServiceImplementsTest {
 
             AirlineDtoRequest request = new AirlineDtoRequest("Fly Emirates", "FLC");
 
-            Airline airlineUpdate = new Airline(airline.id(), request.name(), request.iacaoCode());
+            Airline airlineUpdate = new Airline(airline.getId(), request.name(), request.icaoCode(),null,null,0);
             when(airlineRepository.findByIcaoCode(icao)).thenReturn(Optional.of(airlineUpdate));
             when(airlineRepository.save(any(Airline.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -192,8 +192,8 @@ class AirlineServiceImplementsTest {
 
             //assert
             assertNotNull(result);
-            assertEquals(airlineUpdate.name(), result.name());
-            assertEquals(airlineUpdate.icaoCode(), result.icaoCode());
+            assertEquals(airlineUpdate.getName(), result.name());
+            assertEquals(airlineUpdate.getIcaoCode(), result.icaoCode());
         }
 
 
@@ -233,8 +233,8 @@ class AirlineServiceImplementsTest {
             //assert
             verify(airlineRepository, times(1)).save(captor.capture());
             var captured = captor.getValue();
-            assertEquals(captured.icaoCode(), resultCreate.icaoCode());
-            assertEquals(captured.name(), resultCreate.name());
+            assertEquals(captured.getIcaoCode(), resultCreate.icaoCode());
+            assertEquals(captured.getName(), resultCreate.name());
 
         }
 
@@ -244,7 +244,7 @@ class AirlineServiceImplementsTest {
             //arrange
             String icao = "FLC";
             var request = new AirlineDtoRequest("Fly Cell", "FLC");
-            var airline = new Airline(1L, "Fly Cell", icao);
+            var airline = new Airline(1L, "Fly Cell", icao,null,null,0);
             when(airlineRepository.findByIcaoCode(icao)).thenReturn(Optional.of(airline));
 
             //act
