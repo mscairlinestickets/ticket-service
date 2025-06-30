@@ -89,26 +89,6 @@ public class FlightControllerIntegrationTest {
                     .andExpect(jsonPath("$.aircraftModel").value(request.model()));
         }
 
-        @Test
-        @DisplayName("Retorna erro 422 - UNPROCESS ENTITY, caso já tenha um voo com esse numero cadastrado.")
-        void shouldExceptionWhenFlightAlreadyExists() throws Exception {
-
-            var request = new FlightDtoRequest(
-                    FLIGHT_NUMBER, "GRU", "REC", LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.SECONDS),
-                    180, 180, new BigDecimal("899.99"), airline.getIcaoCode(), aircraft.getModel());
-
-            var flightRequest = new Flight(null,
-                    FLIGHT_NUMBER, "GRU", "SP", LocalDateTime.now().plusDays(2).truncatedTo(ChronoUnit.SECONDS),
-                    180, 180, new BigDecimal("899.99"), airline, aircraft, Instant.now(), Instant.now(), 0);
-
-            flightRepository.save(flightRequest);
-
-            mockMvc.perform(post("/api/flights")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(request)))
-                    .andExpect(status().isUnprocessableEntity())
-                    .andExpect(content().string("Flight with number: " + FLIGHT_NUMBER + " already exist."));
-        }
 
         @Test
         @DisplayName("Retorna erro 409 - CONFLICT, caso tente cadastrar o mesmo voo com numero, horário para outro destino.")

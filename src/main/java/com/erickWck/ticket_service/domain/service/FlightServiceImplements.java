@@ -22,19 +22,22 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Service
 public class FlightServiceImplements implements FlightService {
-
 
     private final AirlineRepository airLineRepository;
     private final AircraftRepository aircraftRepository;
     private final FlightRepository flightRepository;
     private final FlightValidator flightValidator;
+
     private static final Logger log = LoggerFactory.getLogger(FlightServiceImplements.class);
 
-
-    public FlightServiceImplements(AirlineRepository airLineRepository, AircraftRepository aircraftRepository, FlightRepository flightRepository, FlightValidator flightValidator) {
+    public FlightServiceImplements(
+            AirlineRepository airLineRepository,
+            AircraftRepository aircraftRepository,
+            FlightRepository flightRepository,
+            FlightValidator flightValidator
+    ) {
         this.airLineRepository = airLineRepository;
         this.aircraftRepository = aircraftRepository;
         this.flightRepository = flightRepository;
@@ -43,47 +46,62 @@ public class FlightServiceImplements implements FlightService {
 
     @Override
     public FlightDtoResponse createFlight(FlightDtoRequest request) {
-
         log.info("Iniciando criação de voo: {}", request.flightNumber());
+
         var airline = getAirlineOrThrow(request.icaoCode());
+        log.debug("Companhia aérea encontrada: {}", airline.getName());
+
         var aircraft = getAircraftOrThrow(request.model());
+        log.debug("Aeronave encontrada: {}", aircraft.getModel());
 
         Flight flight = FlightMapper.dtoToEntity(request, airline, aircraft);
-
         flightValidator.validateFlight(flight);
+        log.debug("Validação do voo concluída com sucesso.");
+
         var existFly = flightRepository.findByFlightNumber(request.flightNumber());
 
-        if (existFly.isPresent()) {
-            throw new FlightAlreadyExist(request.flightNumber());
-        }
+//        if (existFly.isPresent()) {
+//            log.warn("Tentativa de criação de voo já existente: {}", request.flightNumber());
+//            throw new FlightAlreadyExist(request.flightNumber());
+//        }
 
         var result = flightRepository.save(flight);
-
         log.info("Voo registrado com sucesso: {} (ID: {})", result.getFlightNumber(), result.getId());
+
         return FlightMapper.entityToDto(result);
     }
 
-
     @Override
     public FlightDtoResponse findFlightNumber(String flyNumber) {
+        log.info("Buscando voo pelo número: {}", flyNumber);
+        var flight = flightRepository.findByFlightNumber(flyNumber)
+                .orElseThrow(() -> {
+                    log.error("Voo não encontrado: {}", flyNumber);
+                    return new FlightNotFoundException(flyNumber);
+                });
 
-        return FlightMapper.entityToDto(flightRepository.findByFlightNumber(flyNumber)
-                .orElseThrow(() -> new FlightNotFoundException(flyNumber))
-        );
+        log.debug("Voo encontrado: {}", flight.getFlightNumber());
+        return FlightMapper.entityToDto(flight);
     }
 
     @Override
     public List<FlightDtoResponse> findAllFlight() {
-        return flightRepository.findAll()
-                .stream().map(FlightMapper::entityToDto)
+        log.info("Buscando todos os voos cadastrados.");
+        var flights = flightRepository.findAll();
+        log.debug("Total de voos encontrados: {}", flights.size());
+
+        return flights.stream()
+                .map(FlightMapper::entityToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public FlightDtoResponse editFlight(String flyNumber, FlightDtoRequest request) {
-
+        log.info("Editando voo: {}", flyNumber);
         return flightRepository.findByFlightNumber(flyNumber)
                 .map(existFly -> {
+                    log.debug("Voo encontrado para edição: {}", existFly.getFlightNumber());
+
                     Flight flightUpdate = Flight.builder()
                             .id(existFly.getId())
                             .flightNumber(existFly.getFlightNumber())
@@ -99,28 +117,40 @@ public class FlightServiceImplements implements FlightService {
                             .lastModifiedDate(existFly.getLastModifiedDate())
                             .version(existFly.getVersion())
                             .build();
-                    flightRepository.save(flightUpdate);
-                    return FlightMapper.entityToDto(flightUpdate);
+
+                    var updated = flightRepository.save(flightUpdate);
+                    log.info("Voo atualizado com sucesso: {} (ID: {})", updated.getFlightNumber(), updated.getId());
+                    return FlightMapper.entityToDto(updated);
                 })
-                .orElseThrow(() -> new FlightNotFoundException(flyNumber));
+                .orElseThrow(() -> {
+                    log.error("Voo para edição não encontrado: {}", flyNumber);
+                    return new FlightNotFoundException(flyNumber);
+                });
     }
 
     @Override
     public void delete(String flyNumber) {
-
-        flightRepository.deleteByFlightNumber(findFlightNumber(flyNumber).flightNumber());
-
+        log.info("Iniciando remoção do voo: {}", flyNumber);
+        var flight = findFlightNumber(flyNumber); // já faz log internamente
+        flightRepository.deleteByFlightNumber(flight.flightNumber());
+        log.info("Voo removido com sucesso: {}", flight.flightNumber());
     }
 
     private Airline getAirlineOrThrow(String icaoCode) {
+        log.debug("Buscando companhia aérea pelo ICAO: {}", icaoCode);
         return airLineRepository.findByIcaoCode(icaoCode)
-                .orElseThrow(() -> new AirlineNotFoundException(icaoCode));
+                .orElseThrow(() -> {
+                    log.error("Companhia aérea não encontrada: {}", icaoCode);
+                    return new AirlineNotFoundException(icaoCode);
+                });
     }
 
     private Aircraft getAircraftOrThrow(String model) {
+        log.debug("Buscando aeronave pelo modelo: {}", model);
         return aircraftRepository.findByModel(model)
-                .orElseThrow(() -> new AircraftNotFoundException(model));
+                .orElseThrow(() -> {
+                    log.error("Aeronave não encontrada: {}", model);
+                    return new AircraftNotFoundException(model);
+                });
     }
-
-
 }

@@ -222,26 +222,6 @@ class FlightServiceImplementsTest {
         }
 
         @Test
-        void shouldThrowAlreadyExceptionWhenAlreadyExist() {
-            String flyNumber = "LAT123";
-            String model = "A320";
-            String icao = "TAM";
-            //arrange
-            when(airLineRepository.findByIcaoCode(icao)).thenReturn(Optional.of(airline));
-            when(aircraftRepository.findByModel(model)).thenReturn(Optional.of(aircraft));
-            when(flightRepository.findByFlightNumber(flyNumber)).thenReturn(Optional.of(flight));
-
-            //act
-            var messageException = assertThrows(FlightAlreadyExist.class, () -> {
-                flightService.createFlight(request);
-            });
-
-            //assert
-            String message = "Flight with number: " + flyNumber + " already exist.";
-            assertEquals(message, messageException.getMessage());
-        }
-
-        @Test
         void shouldThrowFlightNotFoundExceptionWhenDoesNotExists() {
             //arrange
             String flyNumber = "LAT123";

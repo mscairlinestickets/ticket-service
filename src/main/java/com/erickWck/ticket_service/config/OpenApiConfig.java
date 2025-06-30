@@ -13,14 +13,21 @@ public class OpenApiConfig {
     public OpenAPI customerOpenApi() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Catalogo de Passagens aéreas.")
+                        .title("Catálogo de Passagens Aéreas")
                         .version("1.0")
-                        .description("Documentação dos endpoints da API de serviço de catalogo de passagens aéreas.")
-                        .contact(new Contact().name("Erick Silva")
+                        .description("""
+                        API desenvolvida como projeto pessoal por Erick Silva, voltada à gestão de companhias aéreas, aeronaves e voos — oferecendo um catálogo de passagens disponíveis para compra.
+
+                        Este serviço compõe um dos microsserviços do ecossistema de passagens aéreas em desenvolvimento, servindo como vitrine funcional e técnica de boas práticas com Spring Boot, arquitetura limpa (Clean Architecture) e documentação via OpenAPI.
+                        """)
+                        .contact(new Contact()
+                                .name("Erick Silva")
                                 .email("erickk.nsilva100@gmail.com")
                                 .url("https://github.com/erickknsilva"))
                 );
     }
+
+
 
 
 }
