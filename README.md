@@ -10,8 +10,9 @@ Sistema de **gestão de voos**, com funcionalidades para cadastrar e consultar v
 
 ## 🧪 Estratégia de Desenvolvimento
 
-O projeto foi desenvolvido utilizando a abordagem **API First**, onde o contrato da API é definido antes da implementação. Isso garante:
+O projeto foi desenvolvido utilizando a abordagem **API First**, onde o contrato da API é definido antes da implementação.
 
+Benefecios:
 - Clareza nos endpoints expostos
 - Desenvolvimento orientado por TDD
 - Evolução desacoplada da interface REST
