@@ -60,11 +60,6 @@ public class FlightServiceImplements implements FlightService {
 
         var existFly = flightRepository.findByFlightNumber(request.flightNumber());
 
-//        if (existFly.isPresent()) {
-//            log.warn("Tentativa de criação de voo já existente: {}", request.flightNumber());
-//            throw new FlightAlreadyExist(request.flightNumber());
-//        }
-
         var result = flightRepository.save(flight);
         log.info("Voo registrado com sucesso: {} (ID: {})", result.getFlightNumber(), result.getId());
 
