@@ -1,0 +1,3 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://airline-postgres/airlinedb_ticket

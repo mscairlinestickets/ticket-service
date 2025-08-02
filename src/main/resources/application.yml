@@ -1,5 +1,5 @@
 server:
-  port: 9001
+  port: ${PORT:9001}
 spring:
   application:
     name: ticket-service
