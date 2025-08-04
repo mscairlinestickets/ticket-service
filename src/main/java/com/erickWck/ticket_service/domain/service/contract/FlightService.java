@@ -12,5 +12,6 @@ public interface FlightService {
     List<FlightDtoResponse> findAllFlight();
     FlightDtoResponse editFlight(String flyNumber, FlightDtoRequest request);
     void delete(String flyBumber);
+    FlightDtoResponse orderBookingFlight (String flightNumber, int quantity);
 
 }

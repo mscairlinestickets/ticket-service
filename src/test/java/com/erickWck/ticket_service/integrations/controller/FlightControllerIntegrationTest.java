@@ -1,13 +1,16 @@
 package com.erickWck.ticket_service.integrations.controller;
 
 import com.erickWck.ticket_service.TestcontainersServiceConfiguration;
+import com.erickWck.ticket_service.controller.dto.BookingRequestPayload;
 import com.erickWck.ticket_service.controller.dto.flight.FlightDtoRequest;
 import com.erickWck.ticket_service.domain.entity.Aircraft;
 import com.erickWck.ticket_service.domain.entity.Airline;
 import com.erickWck.ticket_service.domain.entity.Flight;
+import com.erickWck.ticket_service.domain.mapper.FlightMapper;
 import com.erickWck.ticket_service.domain.repository.AircraftRepository;
 import com.erickWck.ticket_service.domain.repository.AirlineRepository;
 import com.erickWck.ticket_service.domain.repository.FlightRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -60,6 +63,38 @@ public class FlightControllerIntegrationTest {
 
         airline = airlineRepository.save(new Airline(null, "Azul", "AZU", Instant.now(), Instant.now(), 0));
         aircraft = aircraftRepository.save(new Aircraft(null, "A320", "Airbus", 180, Instant.now(), Instant.now(), 0));
+    }
+
+    @DisplayName("POST /api/flights/orderBooking")
+    @Nested
+    class OrderFlight {
+
+        @Test
+        @DisplayName("Deve retornar o Voo que o booking-service esta solicitando e dar baixa nos assento.")
+        void shouldAcceptedOrderBooking() throws Exception {
+
+            var flight = new FlightDtoRequest(
+                    FLIGHT_NUMBER, "GRU", "REC", LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.SECONDS),
+                    180, 180, new BigDecimal("899.99"), airline.getIcaoCode(), aircraft.getModel());
+            flightRepository.save(FlightMapper.dtoToEntity(flight, airline, aircraft));
+
+            var request = new BookingRequestPayload(FLIGHT_NUMBER, 5);
+
+            mockMvc.perform(post("/api/flights/orderBooking")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(request)))
+                    .andExpect(status().isAccepted())
+                    .andExpect(jsonPath("$.flightNumber").value(FLIGHT_NUMBER))
+                    .andExpect(jsonPath("$.origin").value(flight.origin()))
+                    .andExpect(jsonPath("$.destination").value(flight.destination()))
+                    .andExpect(jsonPath("$.departureDateTime").value(flight.departureDateTime().truncatedTo(ChronoUnit.SECONDS).toString()))
+                    .andExpect(jsonPath("$.totalSeats").value(flight.totalSeats()))
+                    .andExpect(jsonPath("$.availableSeats").value(175))
+                    .andExpect(jsonPath("$.price").value(flight.price()))
+                    .andExpect(jsonPath("$.icaoCode").value(flight.icaoCode()))
+                    .andExpect(jsonPath("$.aircraftModel").value(flight.model()));
+
+        }
     }
 
     @Nested

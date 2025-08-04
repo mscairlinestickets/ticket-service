@@ -12,12 +12,12 @@ public class FlightFunctions {
         return flight.getAvailableSeats() > 0;
     }
 
-    public static void decrementAvailableSeats(Flight flight) {
+    public static void decrementAvailableSeats(Flight flight, int quantity) {
 
         if (!hasAvailableSeats(flight)) {
             throw new NoAvailableSeatsException(flight.getFlightNumber());
         }
-        flight.setAvailableSeats(flight.getAvailableSeats() - 1);
+        flight.setAvailableSeats(flight.getAvailableSeats() - quantity);
     }
 
 }
