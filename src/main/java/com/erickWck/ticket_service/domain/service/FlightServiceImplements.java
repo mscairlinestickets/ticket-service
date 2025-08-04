@@ -14,6 +14,7 @@ import com.erickWck.ticket_service.domain.repository.AircraftRepository;
 import com.erickWck.ticket_service.domain.repository.AirlineRepository;
 import com.erickWck.ticket_service.domain.repository.FlightRepository;
 import com.erickWck.ticket_service.domain.service.contract.FlightService;
+import com.erickWck.ticket_service.domain.service.flightFunctions.FlightFunctions;
 import com.erickWck.ticket_service.domain.service.flightFunctions.FlightValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -129,6 +130,22 @@ public class FlightServiceImplements implements FlightService {
         var flight = findFlightNumber(flyNumber); // já faz log internamente
         flightRepository.deleteByFlightNumber(flight.flightNumber());
         log.info("Voo removido com sucesso: {}", flight.flightNumber());
+    }
+
+    @Override
+    public FlightDtoResponse orderBookingFlight(String flightNumber, int quantity) {
+        log.info("Iniciando orderBookingFlight para o voo [{}] com quantidade [{}]", flightNumber, quantity);
+
+        var flightOrderBooking = flightRepository.findByFlightNumber(flightNumber).get();
+
+        log.debug("Antes da reserva: assentos disponíveis [{}]", flightOrderBooking.getAvailableSeats());
+        FlightFunctions.decrementAvailableSeats(flightOrderBooking, quantity);
+
+        log.debug("Depois da reserva: assentos disponíveis [{}]", flightOrderBooking.getAvailableSeats());
+        flightRepository.save(flightOrderBooking);
+
+        log.info("Reserva finalizada com sucesso para o voo [{}]", flightNumber);
+        return FlightMapper.entityToDto(flightOrderBooking);
     }
 
     private Airline getAirlineOrThrow(String icaoCode) {

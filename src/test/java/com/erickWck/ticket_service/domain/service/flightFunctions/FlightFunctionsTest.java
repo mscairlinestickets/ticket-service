@@ -61,7 +61,7 @@ class FlightFunctionsTest {
         void shouldDecrementWhenHasSeatsAvailable() {
 
             //arrange
-            FlightFunctions.decrementAvailableSeats(flight);
+            FlightFunctions.decrementAvailableSeats(flight,1);
 
             //act e assert
             assertEquals(179, flight.getAvailableSeats());
@@ -76,7 +76,7 @@ class FlightFunctionsTest {
 
             //arrange
             var messageException = assertThrows(NoAvailableSeatsException.class, () -> {
-                FlightFunctions.decrementAvailableSeats(flight);
+                FlightFunctions.decrementAvailableSeats(flight,0);
             });
 
             //assert
