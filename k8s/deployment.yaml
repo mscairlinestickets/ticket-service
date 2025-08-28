@@ -30,6 +30,14 @@ spec:
               value: "50"
             - name: SPRING_PROFILES_ACTIVE
               value: test
+            - name: JAVA_TOOL_OPTIONS
+              value: "-javaagent:/workspace/BOOT-INF/lib/opentelemetry-javaagent-1.33.3.jar"
+            - name: OTEL_SERVICE_NAME
+              value: "ticket-service"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://tempo:4317"
+            - name: OTEL_METRICS_EXPORTER
+              value: "none"
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
