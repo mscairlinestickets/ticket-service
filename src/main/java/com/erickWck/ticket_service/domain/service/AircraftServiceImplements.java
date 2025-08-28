@@ -43,7 +43,7 @@ public class AircraftServiceImplements implements AircraftService {
     public AircraftDtoResponse findByModelAircraft(String model) {
         var aircraft = aircraftRepository.findByModel(model)
                 .orElseThrow(() -> {
-                    log.warn("Aeronave não encontrada para o modelo: '{}'", model);
+                    log.warn("Aeronave nao encontrada para o modelo: '{}'", model);
                     return new AircraftNotFoundException(model);
                 });
 
