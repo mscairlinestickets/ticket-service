@@ -1,5 +1,9 @@
 [![Build Status](https://github.com/mscairlinestickets/ticket-service/actions/workflows/commit-stage.yml/badge.svg)](https://github.com/mscairlinestickets/ticket-service/actions/workflows/commit-stage.yml)
 [![License](https://img.shields.io/github/license/erickknsilva/ticket-service)](LICENSE)
+<br>
+Desenvolvedor: Erick Nunes da Silva 
+<br>
+GitHub: https://github.com/erickknsilva
 # ✈️ Ticket Service
 
 Sistema de **gestão de voos**, com funcionalidades para cadastrar e consultar voos, companhias aéreas e aeronaves.
