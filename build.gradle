@@ -21,7 +21,7 @@ configurations {
     }
 }
 
-ext{
+ext {
     set('otelVersion', "1.33.3")
     set('springCloudVersion', "2024.0.0")
 }
@@ -38,6 +38,7 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
     implementation 'org.flywaydb:flyway-core:9.8.1'
     implementation 'org.springframework.retry:spring-retry'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -53,6 +54,7 @@ dependencies {
     testImplementation 'org.testcontainers:postgresql'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testImplementation 'org.springframework.boot:spring-boot-starter-webflux'
+    testImplementation 'org.springframework.security:spring-security-test'
 
     // Plugin do PITest para JUnit 5
     pitest 'org.pitest:pitest-junit5-plugin:1.2.1'
@@ -87,7 +89,7 @@ bootBuildImage {
     imageName = "${project.name}"
     environment = [
             "BP_JVM_VERSION": "17",
-            "BP_OCI_LABELS": """,
+            "BP_OCI_LABELS" : """,
             "BP_IMAGE_LABELS": "org.opencontainers.image.source=https://github.com/mscairlinestickets/ticket-service",
             org.opencontainers.image.title=${project.name}
             org.opencontainers.image.description=Serviço responsável por emissão de passagens

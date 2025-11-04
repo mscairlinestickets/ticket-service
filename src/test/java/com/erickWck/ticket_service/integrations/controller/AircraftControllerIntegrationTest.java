@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.Instant;
@@ -48,6 +49,7 @@ class AircraftControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve criar uma nova aeronave com sucesso")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldCreateNewAircraft() throws Exception {
             var request = new AircraftDtoRequest(MODEL, "Boeing", 180);
             var aircraft = new Aircraft(null, MODEL, "Boeing", 180,Instant.now(), Instant.now(), 0);
@@ -63,6 +65,7 @@ class AircraftControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve retornar erro ao tentar criar uma aeronave duplicada")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnErrorWhenAircraftAlreadyExists() throws Exception {
             var request = new AircraftDtoRequest(MODEL, "Boeing", 180);
             var aircraft = new Aircraft(null, MODEL, "Boeing", 180,Instant.now(), Instant.now(), 0);
@@ -82,6 +85,7 @@ class AircraftControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve listar todas as aeronaves")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldListAllAircrafts() throws Exception {
             var aircraft = new Aircraft(null, MODEL, "Boeing", 180,Instant.now(), Instant.now(), 0);
             var aircraft2 = new Aircraft(null, "TSF750", "Airbus", 280,Instant.now(), Instant.now(), 0);
@@ -103,6 +107,7 @@ class AircraftControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve retornar os detalhes de uma aeronave existente")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnAircraftDetails() throws Exception {
             var aircraft = new Aircraft(null, MODEL, "Boeing", 180,Instant.now(), Instant.now(), 0);
             aircraftRepository.save(aircraft);
@@ -117,6 +122,7 @@ class AircraftControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve retornar erro ao buscar uma aeronave inexistente")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnErrorWhenAircraftNotFound() throws Exception {
             mockMvc.perform(get("/api/aircrafts/" + MODEL)
                             .contentType(MediaType.APPLICATION_JSON))
@@ -126,6 +132,7 @@ class AircraftControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve retornar erro 405 ao acessar GET com path incompleto")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnMethodNotAllowedWhenPathVariableMissing() throws Exception {
             mockMvc.perform(get("/api/aircrafts/")
                             .contentType(MediaType.APPLICATION_JSON))
@@ -134,6 +141,7 @@ class AircraftControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve retornar 404 ao acessar rota inexistente")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnNotFoundForInvalidPath() throws Exception {
             mockMvc.perform(get("/api/aircraftsss")
                             .contentType(MediaType.APPLICATION_JSON))
@@ -148,6 +156,7 @@ class AircraftControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve atualizar os dados da aeronave com sucesso")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void whenUpdateRequestThenEditAircraft() throws Exception {
 
             var request = new AircraftDtoRequest(MODEL, "Boeing", 180);
@@ -174,6 +183,7 @@ class AircraftControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve retornar erro ao tentar editar uma aeronave inexistente")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void whenGetRequestExceptionEditAircraftNotFound() throws Exception {
             var request = new AircraftDtoRequest(MODEL, "Boeing", 180);
 
@@ -194,6 +204,7 @@ class AircraftControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve deletar uma aeronave com sucesso")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void whenDeleteRequestDeleteAircraft() throws Exception {
             var aircraft = new Aircraft(null, "Air320", "Boeing", 180,Instant.now(), Instant.now(), 0);
             aircraftRepository.save(aircraft);
@@ -204,6 +215,7 @@ class AircraftControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve retornar erro ao tentar deletar uma aeronave inexistente")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void whenDeleteRequestThrowExceptionAircraftNotFoundDeleteIsNotFound() throws Exception {
             var aircraft = new Aircraft(null, MODEL, "Boeing", 180, Instant.now(), Instant.now(), 0);
 
@@ -216,6 +228,7 @@ class AircraftControllerIntegrationTest {
 
     @Test
     @DisplayName("Deve retornar 400 ao criar aeronave com dados inválidos")
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
     void shouldReturnBadRequestForInvalidAircraftData() throws Exception {
         var request = new AircraftDtoRequest("", "", -1);
         mockMvc.perform(post("/api/aircrafts")

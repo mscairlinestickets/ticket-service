@@ -1,5 +1,6 @@
 package com.erickWck.ticket_service.controller;
 
+import com.erickWck.ticket_service.TestSecurityConfig;
 import com.erickWck.ticket_service.controller.dto.flight.FlightDtoRequest;
 import com.erickWck.ticket_service.controller.dto.flight.FlightDtoResponse;
 import com.erickWck.ticket_service.domain.exception.FlightAlreadyExist;
@@ -12,7 +13,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -27,6 +31,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Import(TestSecurityConfig.class)
 @WebMvcTest(FlightController.class)
 class FlightControllerTest {
 
@@ -38,6 +43,9 @@ class FlightControllerTest {
 
     @MockitoBean
     private FlightService flightService;
+
+    @MockitoBean
+    private UserDetailsService userDetailsService;
 
     private FlightDtoRequest request;
     private FlightDtoResponse response;
@@ -54,6 +62,7 @@ class FlightControllerTest {
 
         @Test
         @DisplayName("Deve criar o voo e retornar o status 201 - CREATED")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldCreateAirlineWhenDoesNotExist() throws Exception {
             //arrange
             var responseUpdate = new FlightDtoResponse(request.flightNumber(), request.origin(), request.destination(), request.departureDateTime().truncatedTo(ChronoUnit.SECONDS),
@@ -83,6 +92,7 @@ class FlightControllerTest {
 
         @Test
         @DisplayName("Deve retornar o erro 422 - UNPROCESS ENTITY  quando tentar cadastrar um voo flightNumber já existente.")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldError422WhenAirlinesAlreadyExist() throws Exception {
             //arrange
             String flyNumber = "GOL";
@@ -106,6 +116,7 @@ class FlightControllerTest {
 
         @Test
         @DisplayName("Retorna uma lista de airlines com o código 200-Ok")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shoudlListOfFlight() throws Exception {
             //arrange
             var response2 = new FlightDtoResponse("VOO987", "São Paulo", "Florianópolis", LocalDateTime.of(2025, 9, 15, 14, 45), 180, 23, new BigDecimal("749.99"), "LATAM Airlines", "TAM", "Airbus A320", 180);
@@ -138,6 +149,7 @@ class FlightControllerTest {
 
         @Test
         @DisplayName("Retorna um voo quando procurando pelo flightNumber")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnFlightWhenExist() throws Exception {
             //arrange
             String flyNumber = "VOO987";
@@ -163,6 +175,7 @@ class FlightControllerTest {
 
         @Test
         @DisplayName("Retorna erro 404 - quando não encontra o voo pelo flightNumber")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnError404NotFound() throws Exception {
             //arrange
             String flyNumber = "VOO987";
@@ -182,6 +195,7 @@ class FlightControllerTest {
 
         @Test
         @DisplayName("Retorna o voo editado quando ele existir com um status 200 - OK")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnFlightChangeWhenExist() throws Exception {
             //arrange
             String flyNumber = "LAT123";
@@ -212,6 +226,7 @@ class FlightControllerTest {
 
         @Test
         @DisplayName("Retorna o erro - 404 quando não encontra o voo para atualizar.")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldError404WhenFlightDoesNotExist() throws Exception {
             //arrange
             String flyNumber = "LAT123";
@@ -235,6 +250,7 @@ class FlightControllerTest {
 
         @Test
         @DisplayName("Deve deletar voo quando ele existir")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldDeleteAirlineWhenExist() throws Exception {
             //arrange
             String flyNumber = "LAT123";
@@ -247,6 +263,7 @@ class FlightControllerTest {
 
         @Test
         @DisplayName("Deve retornar erro 404 ao tentar deletar voo inexistente")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldError404WhenAirlinesDoesExist() throws Exception {
             //arrange
             String flyNumber = "LAT123";

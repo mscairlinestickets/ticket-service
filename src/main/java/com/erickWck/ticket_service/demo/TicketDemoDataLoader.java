@@ -50,7 +50,7 @@ public class TicketDemoDataLoader {
         var flight = new Flight(null, "AZU4321", "GRU", "REC",
                 LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.SECONDS),
                 180, 180, new BigDecimal("899.99"), airline, aircraft,
-                Instant.now(), Instant.now(), 0);
+                Instant.now(), Instant.now(), null, null,0);
 
         flightRepository.save(flight);
         log.info("Dados de teste salvos com sucesso.");
