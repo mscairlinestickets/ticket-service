@@ -9,6 +9,7 @@ import com.erickWck.ticket_service.domain.entity.Flight;
 public class FlightMapper {
 
     public static Flight dtoToEntity(FlightDtoRequest request, Airline airline, Aircraft aircraft) {
+       //generate constructor in class FLight
         return new Flight(
                 null,
                 request.flightNumber(),
@@ -19,7 +20,7 @@ public class FlightMapper {
                 request.availableSeats(),
                 request.price(),
                 airline,
-                aircraft, null, null, 0
+                aircraft, null, null, null,null,0
         );
     }
 

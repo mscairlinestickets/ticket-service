@@ -5,6 +5,7 @@ import com.erickWck.ticket_service.controller.dto.flight.FlightDtoRequest;
 import com.erickWck.ticket_service.domain.service.contract.FlightService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class FlightController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('SCOPE_FLIGHT:WRITE')")
     public FlightDtoResponse createNewFlight(@RequestBody @Valid FlightDtoRequest flightRequest) {
         return flightService.createFlight(flightRequest);
     }

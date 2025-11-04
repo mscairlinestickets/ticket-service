@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-public interface FlightRepository extends JpaRepository<Flight, Long> {
+public interface FlightRepository extends  JpaRepository<Flight, Long> {
 
     boolean existsByFlightNumberAndDepartureDateTimeAndDestinationNot(String flightNumber, LocalDateTime departureDateTime, String destination);
 
