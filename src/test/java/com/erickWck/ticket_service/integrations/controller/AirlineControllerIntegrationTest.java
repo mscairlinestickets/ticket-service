@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.Instant;
@@ -49,6 +50,7 @@ class AirlineControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve criar uma nova companhia aérea com sucesso")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldCreateNewAirline() throws Exception {
             var request = new AirlineDtoRequest("Gol Linhas Aéreas", ICAO);
 
@@ -62,6 +64,7 @@ class AirlineControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve retornar erro ao tentar criar companhia aérea duplicada")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnErrorWhenAirlineAlreadyExists() throws Exception {
             var airline = new Airline(null, "Gol Linhas Aéreas", ICAO,null,null,0);
             airlineRepository.save(airline);
@@ -82,6 +85,7 @@ class AirlineControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve listar todas as companhias aéreas")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldListAllAirlines() throws Exception {
             airlineRepository.save(new Airline(null, "Gol", "GOL",null,null,0));
             airlineRepository.save(new Airline(null, "Latam", "LAT",null,null,0));
@@ -94,6 +98,7 @@ class AirlineControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve retornar detalhes da companhia aérea")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnAirlineDetails() throws Exception {
             airlineRepository.save(new Airline(null, "Gol", ICAO,Instant.now(), Instant.now(), 0));
 
@@ -106,6 +111,7 @@ class AirlineControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve retornar erro ao buscar companhia inexistente")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnErrorWhenAirlineNotFound() throws Exception {
             mockMvc.perform(get("/api/airlines/" + ICAO))
                     .andExpect(status().isNotFound())
@@ -119,6 +125,7 @@ class AirlineControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve atualizar companhia aérea com sucesso")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldUpdateAirline() throws Exception {
             airlineRepository.save(new Airline(null, "Gol", ICAO,Instant.now(), Instant.now(), 0));
             var request = new AirlineDtoRequest("TAM Airlines", ICAO);
@@ -133,6 +140,7 @@ class AirlineControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve retornar erro ao atualizar companhia inexistente")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnErrorWhenUpdateNotFound() throws Exception {
             var request = new AirlineDtoRequest("Nova", ICAO);
 
@@ -150,6 +158,7 @@ class AirlineControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve deletar companhia aérea com sucesso")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldDeleteAirline() throws Exception {
             airlineRepository.save(new Airline(null, "Gol", ICAO, Instant.now(), Instant.now(), 0));
 
@@ -159,6 +168,7 @@ class AirlineControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve retornar erro ao deletar companhia inexistente")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnErrorWhenDeleteNotFound() throws Exception {
             mockMvc.perform(delete("/api/airlines/" + ICAO))
                     .andExpect(status().isNotFound())

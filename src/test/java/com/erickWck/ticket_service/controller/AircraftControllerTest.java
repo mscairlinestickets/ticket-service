@@ -1,5 +1,7 @@
 package com.erickWck.ticket_service.controller;
 
+import com.erickWck.ticket_service.TestSecurityConfig;
+import com.erickWck.ticket_service.config.SecurityConfig;
 import com.erickWck.ticket_service.controller.dto.aircraft.AircraftDtoRequest;
 import com.erickWck.ticket_service.controller.dto.aircraft.AircraftDtoResponse;
 import com.erickWck.ticket_service.domain.exception.AircraftAlreadyException;
@@ -11,7 +13,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -25,6 +29,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Import(TestSecurityConfig.class)
 @WebMvcTest(AircraftController.class)
 class AircraftControllerTest {
 
@@ -42,6 +47,7 @@ class AircraftControllerTest {
     class ListAircrafts {
         @Test
         @DisplayName("Deve retornar todos os aviões com status 200")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnLisOfAirCrafts() throws Exception {
 
             List<AircraftDtoResponse> list = List.of(new AircraftDtoResponse("Boeing 747", "Boeign", 300),
@@ -66,6 +72,7 @@ class AircraftControllerTest {
 
         @Test
         @DisplayName("Deve retornar o avião pelo model com status 200")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnAircraftWhenExists() throws Exception {
             String model = "Airbus A320";
             var dtoResponse = new AircraftDtoResponse("Airbus A320", "Boeign", 180);
@@ -82,6 +89,7 @@ class AircraftControllerTest {
 
         @Test
         @DisplayName("Deve lançar erro 404 quando o avião não existe")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldThrowAircraftNotFoundWhenDoesNotExist() throws Exception {
             // arrange
             String model = "Airbus A320";
@@ -100,6 +108,7 @@ class AircraftControllerTest {
 
         @Test
         @DisplayName("Deve criar um novo avião com sucesso e retornar status 201")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldCreateAircraft() throws Exception {
             //arrange
             String model = "Airbus A320";
@@ -124,6 +133,7 @@ class AircraftControllerTest {
 
         @Test
         @DisplayName("Deve lançar erro 422(UNPROCESSABLE_ENTITY)  quando o avião já existe")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldAircraftAlreadyExceptionWhenAircraftExists() throws Exception {
             //arrange
             String model = "Airbus A320";
@@ -144,6 +154,7 @@ class AircraftControllerTest {
 
         @Test
         @DisplayName("Deve atualizar um avião existente e retornar status 200")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldUpdateAircraftSuccessfully() throws Exception {
             //arrange
             String model = "AirbusA320";
@@ -166,6 +177,7 @@ class AircraftControllerTest {
 
         @Test
         @DisplayName("Deve retornar 404 ao tentar atualizar um avião que não existe")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnNotFoundWhenUpdatingNonExistentAircraft() throws Exception {
 
             //arrange
@@ -193,6 +205,7 @@ class AircraftControllerTest {
 
         @Test
         @DisplayName("Deve deletar um avião existente e retornar status 204")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldDeleteAircraftSuccessfully() throws Exception {
             //arrange
             String model = "KC-130";
@@ -204,6 +217,7 @@ class AircraftControllerTest {
 
         @Test
         @DisplayName("Deve retornar 404 ao tentar deletar um avião que não existe")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnNotFoundWhenDeletingNonExistentAircraft() throws Exception {
             String model = "KC-130";
             String encode = URLEncoder.encode(model, StandardCharsets.UTF_8);
@@ -223,6 +237,7 @@ class AircraftControllerTest {
 
         @Test
         @DisplayName("Deve retornar 400 quando model está vazio")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturn400WhenModelIsBlank() throws Exception {
             var json = """
                         {
@@ -241,6 +256,7 @@ class AircraftControllerTest {
 
         @Test
         @DisplayName("Deve retornar 400 quando manufacturer está nulo")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturn400WhenManufacturerIsNull() throws Exception {
             var json = """
                         {
@@ -258,6 +274,7 @@ class AircraftControllerTest {
 
         @Test
         @DisplayName("Deve retornar 400 quando seatCapacity for zero ou negativo")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturn400WhenSeatCapacityIsNotPositive() throws Exception {
             var json = """
                         {

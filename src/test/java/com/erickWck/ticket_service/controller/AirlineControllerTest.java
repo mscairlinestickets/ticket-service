@@ -1,5 +1,6 @@
 package com.erickWck.ticket_service.controller;
 
+import com.erickWck.ticket_service.TestSecurityConfig;
 import com.erickWck.ticket_service.controller.dto.airline.AirlineDtoRequest;
 import com.erickWck.ticket_service.controller.dto.airline.AirlineDtoResponse;
 import com.erickWck.ticket_service.domain.exception.AirlineAlreadyExist;
@@ -11,7 +12,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -21,6 +24,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Import(TestSecurityConfig.class)
 @WebMvcTest(AirlineController.class)
 class AirlineControllerTest {
 
@@ -40,6 +44,7 @@ class AirlineControllerTest {
 
         @Test
         @DisplayName("Deve retornar todas companhia aérea com status 200")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnListOfAirlines() throws Exception {
             //arrange
             List<AirlineDtoResponse> list = List.of(new AirlineDtoResponse("FlyGold Airlines", "FGI"),
@@ -66,6 +71,7 @@ class AirlineControllerTest {
 
         @Test
         @DisplayName("Deve retornar a companhia aérea quando ela existir, com status 200")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnAirlineWhenExists() throws Exception {
             //arrange
             String icaoCode = "FGI";
@@ -82,6 +88,7 @@ class AirlineControllerTest {
 
         @Test
         @DisplayName("Deve lançar erro 404 quando airlin não existir")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldThrowAircraftNotFoundWhenDoesNotExist() throws Exception {
             //ararnge
             String icaoCode = "FGI";
@@ -102,6 +109,7 @@ class AirlineControllerTest {
 
         @Test
         @DisplayName("Deve atualizar a companhia aérea e retorna o status 200 - Ok")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldUpdateAirlineSuccessfully() throws Exception {
             //arrange
             String icaoCode = "FGI";
@@ -121,6 +129,7 @@ class AirlineControllerTest {
 
         @Test
         @DisplayName("Deve lançar a exceção AirlineNotFoundException quando a companhia aérea não existir.")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldThrowAirlineNotFoundExceptionWhenDoesNotExist() throws Exception {
             //arrange
             String icaoCode = "FGI";
@@ -144,6 +153,7 @@ class AirlineControllerTest {
 
         @Test
         @DisplayName("Deve deletar a companhia existente e retornar status 204")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldDeleteAirlineWhenExist() throws Exception {
             //
             String icaoCode = "FGI";
@@ -157,6 +167,7 @@ class AirlineControllerTest {
 
         @Test
         @DisplayName("Deve retornar 404 ao tentar deletar uma companhia aérea que não existe")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldDeleteAirlineWhenDoesNotExist() throws Exception {
             //
             String icaoCode = "FGI";
@@ -177,6 +188,7 @@ class AirlineControllerTest {
 
         @Test
         @DisplayName("Deve criar a companhia aérea e retornar o status 201 CREATED")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnAirlinesIsCreatedWithSuccess() throws Exception {
             //arrange
             String icaoCode = "FGI";
@@ -198,6 +210,7 @@ class AirlineControllerTest {
 
         @Test
         @DisplayName("Deve retornar o erro 422 - UNPROCESS ENTITY  quando tentar cadastrar uma companhia aérea com o icaoCode já existente.")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldThrowAirlineAlreadyExceptionWhenAlreadyExists() throws Exception {
             //arrange
             String icaoCode = "FGI";

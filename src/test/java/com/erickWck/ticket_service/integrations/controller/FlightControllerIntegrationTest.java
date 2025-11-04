@@ -21,6 +21,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
@@ -71,6 +72,7 @@ public class FlightControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve retornar o Voo que o booking-service esta solicitando e dar baixa nos assento.")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldAcceptedOrderBooking() throws Exception {
 
             var flight = new FlightDtoRequest(
@@ -102,6 +104,7 @@ public class FlightControllerIntegrationTest {
     class PostFlight {
 
         @Test
+        @WithMockUser(username = "admin", authorities = {"SCOPE_FLIGHT:WRITE"})
         @DisplayName("Deve criar um voo com sucesso")
         void shouldCreateFlightSuccessfully() throws Exception {
 
@@ -126,6 +129,7 @@ public class FlightControllerIntegrationTest {
 
 
         @Test
+        @WithMockUser(username = "admin", authorities = {"SCOPE_FLIGHT:WRITE"})
         @DisplayName("Retorna erro 409 - CONFLICT, caso tente cadastrar o mesmo voo com numero, horário para outro destino.")
         void shouldExceptionWhenFlightFlightNumberIsExistDepartureAndOtherDestination() throws Exception {
             var request = new FlightDtoRequest(
@@ -145,6 +149,7 @@ public class FlightControllerIntegrationTest {
 
         @Test
         @DisplayName("Retorna erro 409 - CONFLICT, caso tente cadastrar o mesmo voo com numero e data de saida já existente.")
+        @WithMockUser(username = "admin", authorities = {"SCOPE_FLIGHT:WRITE"})
         void shouldExceptionWhenFlightFlightNumberIsExistAndDeparture() throws Exception {
 
             var request = new FlightDtoRequest(FLIGHT_NUMBER, "GRU", "REC", LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.SECONDS),
@@ -170,6 +175,7 @@ public class FlightControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve retornar a listagem de todos voo com o status 200 - Ok")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldListAllOfFlights() throws Exception {
             var flight = new Flight(null, FLIGHT_NUMBER, "GRU", "REC", LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.SECONDS),
                     180, 180, new BigDecimal("899.99"), airline, aircraft, Instant.now(), Instant.now(), 0);
@@ -196,6 +202,7 @@ public class FlightControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve retornar os detalhes de uma aeronave existente")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnFlightDetailsByFlightNumber() throws Exception {
             var flight = new Flight(null, FLIGHT_NUMBER, "GRU", "REC", LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.SECONDS),
                     180, 180, new BigDecimal("899.99"), airline, aircraft, Instant.now(), Instant.now(), 0);
@@ -218,6 +225,7 @@ public class FlightControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve retornar erro ao buscar um voo inexistente")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnNotFoundWhenFlightDoesNotExist() throws Exception {
             var flight = new Flight(null, FLIGHT_NUMBER, "GRU", "REC", LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.SECONDS),
                     180, 180, new BigDecimal("899.99"), airline, aircraft, Instant.now(), Instant.now(), 0);
@@ -237,6 +245,7 @@ public class FlightControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve atualizar os dados do voo com sucesso")
+        @WithMockUser(username = "admin", authorities = {"SCOPE_FLIGHT:WRITE"})
         void shouldUpdateFlightSuccessfully() throws Exception {
 
             var request = new FlightDtoRequest(FLIGHT_NUMBER, "GRU", "REC", LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.SECONDS),
@@ -273,6 +282,7 @@ public class FlightControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve retornar error 404 - NOT FOUND ao tentar editar um voo inexistente")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnNotFoundWhenUpdatingNonexistentFlight() throws Exception {
 
             var request = new FlightDtoRequest(FLIGHT_NUMBER, "GRU", "REC", LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.SECONDS),
@@ -294,6 +304,7 @@ public class FlightControllerIntegrationTest {
 
         @Test
         @DisplayName("Retornar o status NOT_CONTENT - 202  quando excluir um voo  com sucesso")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldDeleteFlightSuccessfully() throws Exception {
             var flight = new Flight(null, FLIGHT_NUMBER, "GRU", "REC", LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.SECONDS),
                     180, 180, new BigDecimal("899.99"), airline, aircraft, Instant.now(), Instant.now(), 0);
@@ -308,6 +319,7 @@ public class FlightControllerIntegrationTest {
 
         @Test
         @DisplayName("Retornar erro 404 - NOT FOUND ao tentar deletar um voo inexistente")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnNotFoundWhenDeletingNonexistentFlight() throws Exception {
             var flight = new Flight(null, FLIGHT_NUMBER, "GRU", "REC", LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.SECONDS),
                     180, 180, new BigDecimal("899.99"), airline, aircraft, Instant.now(), Instant.now(), 0);
@@ -328,6 +340,7 @@ public class FlightControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve retornar 400 - Bad Request quando campos obrigatórios estiverem ausentes")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnBadRequestWhenRequiredFieldsAreMissing() throws Exception {
 
             var invalidRequest = new FlightDtoRequest(null, null, null, null,
@@ -342,6 +355,7 @@ public class FlightControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve retornar 400 - Bad Request quando data de partida estiver no passado")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnBadRequestWhenDepartureDateTimeIsInThePast() throws Exception {
             var request = new FlightDtoRequest(
                     FLIGHT_NUMBER,
@@ -364,6 +378,7 @@ public class FlightControllerIntegrationTest {
 
         @Test
         @DisplayName("Deve retornar 400 - Bad Request quando o preço for negativo")
+        @WithMockUser(username = "admin", roles = {"ADMIN"})
         void shouldReturnBadRequestWhenPriceIsNegative() throws Exception {
             var request = new FlightDtoRequest(
                     FLIGHT_NUMBER,
