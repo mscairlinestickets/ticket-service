@@ -20,7 +20,7 @@ spec:
         prometheus.io/port: "9001"
     spec:
       containers:
-        - name: ticket-service-container
+        - name: ticket-service
           image: ticket-service
           imagePullPolicy: IfNotPresent
           ports:
