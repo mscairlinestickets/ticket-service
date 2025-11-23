@@ -10,7 +10,6 @@ Sistema de **gestão de voos**, com funcionalidades para cadastrar e consultar v
 
 ---
 
----
 
 ## 🧪 Estratégia de Desenvolvimento
 
