@@ -7,7 +7,7 @@ on:
 concurrency: acceptance
 
 env:
-  OWNER: erick-silva
+  OWNER: mscairlinestickets
   REGISTRY: 234559571647.dkr.ecr.us-east-1.amazonaws.com
   APP_REPO: ticket-service
   DEPLOY_REPO: airline-deployment
