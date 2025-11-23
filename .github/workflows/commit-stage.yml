@@ -107,7 +107,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v5.1.0
         with:
-          aws-region: us-east-2
+          aws-region: us-east-1
           role-to-assume: arn:aws:iam::234559571647:role/workshkop-nov-eks-cluster-github-role
           role-session-name: gha-${{ github.run_id }}
 
