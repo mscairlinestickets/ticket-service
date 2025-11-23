@@ -47,7 +47,7 @@ jobs:
           repository: ${{ env.OWNER }}/${{ env.DEPLOY_REPO }}
           event-type: app_delivery
           client-payload: '{
-              "app_image": "${{ env.REGISTRY }}/${{ env.OWNER }}/${{ env.APP_REPO }}",
+              "app_image": "${{ env.REGISTRY }}/${{ env.APP_REPO }}",
               "app_name": "${{ env.APP_REPO }}",
               "app_version": "${{ env.VERSION }}"
             }'
