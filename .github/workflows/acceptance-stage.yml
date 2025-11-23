@@ -41,7 +41,7 @@ jobs:
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.DISPATCH_TOKEN }}
-          repository: ${{ env.OWNER }}/${{ env.DEPLOY_REPO }}
+          repository: mscairlinestickets/airline-deployment
           event-type: app_delivery
           client-payload: '{
               "app_image": "${{ env.REGISTRY }}/${{ env.OWNER }}/${{ env.APP_REPO }}",
