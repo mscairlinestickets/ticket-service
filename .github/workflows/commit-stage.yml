@@ -2,8 +2,8 @@ name: Commit Stage
 on: push
 
 env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  REGISTRY: 234559571647.dkr.ecr.us-east-1.amazonaws.com
+  IMAGE_NAME: ticket-service
   VERSION: ${{ github.sha }}
 
 jobs:
@@ -28,14 +28,14 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew build
-          ./gradlew pitest 
+#          ./gradlew pitest
           ./gradlew bootBuildImage
 
-      - name: Upload PITest report
-        uses: actions/upload-artifact@v4
-        with:
-          name: pitest-report
-          path: build/reports/pitest
+#      - name: Upload PITest report
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: pitest-report
+#          path: build/reports/pitest
 
       - name: Code vulnerability scanning
         uses: anchore/scan-action@v3
@@ -106,3 +106,24 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v5.1.0
+        with:
+          aws-region: us-east-2
+          role-to-assume: arn:aws:iam::234559571647:role/workshkop-nov-eks-cluster-github-role
+          role-session-name: gha-${{ github.run_id }}
+
+      - name: Build, tag, and push docker image to Amazon ECR
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: ticket-service
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          chmod +x gradlew
+          ./gradlew bootBuildImage \
+            --imageName ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG

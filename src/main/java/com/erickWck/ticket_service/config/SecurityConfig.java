@@ -24,6 +24,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(authorization -> {
                     authorization.requestMatchers(HttpMethod.GET, "/api/flights/**").permitAll()
+                            .requestMatchers(HttpMethod.GET, "/actuator/**").permitAll()
                             .anyRequest().authenticated();
                 })
                 .oauth2ResourceServer(oauth -> oauth.jwt(jwtConfigurer -> jwtAuthenticationConverter()))
