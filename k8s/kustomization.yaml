@@ -4,7 +4,6 @@ kind: Kustomization
 resources:
   - deployment.yaml
   - service-clusterip.yaml
-  - node-service.yaml
 
 configMapGenerator:
   - name: ticket-config
